@@ -3,491 +3,693 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arduino IDE Clone</title>
+  <title>sketch_apr28a | Arduino IDE 2.3.7</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: "Segoe UI", Arial, sans-serif;
+    :root{
+      --titlebar:#f3efe9;
+      --menubar:#ffffff;
+      --toolbar:#0a7b7b;
+      --toolbar-dark:#076b6b;
+      --sidebar:#edf2f2;
+      --sidebar-border:#d6dddd;
+      --tabbar:#eef2f2;
+      --editor-bg:#ffffff;
+      --editor-line:#1b82aa;
+      --editor-text:#455a64;
+      --editor-comment:#8aa0a0;
+      --editor-key:#0a8db7;
+      --editor-fn:#6a4fa3;
+      --status:#0a7b7b;
+      --border:#dde4e4;
+      --text:#2d2d2d;
+      --icon:#9aabb0;
+      --icon-hover:#74868d;
+      --win-hover:#e6e1db;
+      --win-close:#e81123;
     }
 
-    body {
-      background: #ffffff;
-      overflow: hidden;
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
     }
 
-    .app {
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      background: #fff;
+    html,body{
+      width:100%;
+      height:100%;
+      overflow:hidden;
+      background:#cfcfcf;
+      font-family:"Segoe UI", Tahoma, Arial, sans-serif;
+      user-select:none;
     }
 
-    /* ---------------- TITLE BAR ---------------- */
-    .title-bar {
-      height: 32px;
-      background: #ece7e1;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 0 0 8px;
-      font-size: 14px;
-      color: #222;
-      border-bottom: 1px solid #ddd;
+    /* APP WINDOW */
+    .window{
+      width:100vw;
+      height:100vh;
+      display:flex;
+      flex-direction:column;
+      background:#fff;
+      overflow:hidden;
     }
 
-    .title-left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    /* ================= TITLE BAR ================= */
+    .titlebar{
+      height:32px;
+      background:var(--titlebar);
+      border-bottom:1px solid #ddd7d1;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding-left:8px;
+      flex-shrink:0;
     }
 
-    .title-left .logo {
-      width: 18px;
-      height: 18px;
-      background: #008184;
-      border-radius: 4px;
-      position: relative;
+    .title-left{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      min-width:0;
     }
 
-    .title-left .logo::before {
-      content: "∞";
-      position: absolute;
-      color: #fff;
-      font-size: 13px;
-      font-weight: bold;
-      top: -1px;
-      left: 2px;
+    .arduino-app-icon{
+      width:18px;
+      height:18px;
+      border-radius:4px;
+      background:#0b8a8a;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-shrink:0;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
     }
 
-    .window-controls {
-      display: flex;
-      height: 100%;
+    .arduino-app-icon svg{
+      width:12px;
+      height:12px;
+      display:block;
     }
 
-    .window-btn {
-      width: 46px;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 14px;
-      color: #222;
+    .window-title{
+      font-size:13px;
+      color:#232323;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
 
-    .window-btn:hover {
-      background: #ddd;
+    .window-controls{
+      height:100%;
+      display:flex;
+      align-items:stretch;
+      flex-shrink:0;
     }
 
-    .window-btn.close:hover {
-      background: #e81123;
-      color: #fff;
+    .win-btn{
+      width:46px;
+      height:100%;
+      border:none;
+      background:transparent;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      color:#333;
+      transition:background .12s ease;
     }
 
-    /* ---------------- MENU BAR ---------------- */
-    .menu-bar {
-      height: 30px;
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      padding: 0 8px;
-      font-size: 14px;
-      color: #1e1e1e;
-      background: #ffffff;
-      border-bottom: 1px solid #e6e6e6;
+    .win-btn:hover{ background:var(--win-hover); }
+    .win-btn.close:hover{ background:var(--win-close); color:#fff; }
+
+    .win-btn svg{
+      width:10px;
+      height:10px;
+      display:block;
     }
 
-    .menu-item {
-      cursor: pointer;
+    /* ================= MENU BAR ================= */
+    .menubar{
+      height:22px;
+      background:var(--menubar);
+      display:flex;
+      align-items:center;
+      gap:18px;
+      padding:0 6px;
+      border-bottom:1px solid #e8ecec;
+      flex-shrink:0;
+      position:relative;
+      z-index:20;
     }
 
-    .menu-item:hover {
-      background: #f2f2f2;
-      padding: 3px 4px;
-      border-radius: 3px;
+    .menu-item{
+      font-size:13px;
+      color:#222;
+      line-height:1;
+      padding:2px 2px;
+      cursor:pointer;
+      border-radius:2px;
     }
 
-    /* ---------------- TOP TOOLBAR ---------------- */
-    .toolbar {
-      height: 46px;
-      background: #007a7c;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 14px;
+    .menu-item:hover{
+      background:#f1f3f3;
     }
 
-    .toolbar-left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .menu-item.active{
+      background:#e8ecec;
     }
 
-    .circle-btn {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.18);
-      border: 1px solid rgba(255,255,255,0.15);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #d9f0ef;
-      font-size: 16px;
-      cursor: pointer;
+    /* FILE DROPDOWN */
+    .file-dropdown{
+      position:absolute;
+      top:22px;
+      left:4px;
+      width:200px;
+      background:#ffffff;
+      border:1px solid #cfd7d7;
+      box-shadow:0 4px 16px rgba(0,0,0,0.12);
+      display:none;
+      flex-direction:column;
+      padding:4px 0;
+      z-index:50;
     }
 
-    .circle-btn:hover {
-      background: rgba(255,255,255,0.25);
+    .file-dropdown.show{
+      display:flex;
     }
 
-    .board-select {
-      margin-left: 8px;
-      width: 255px;
-      height: 32px;
-      background: #f2f5f5;
-      border: 1px solid #d5dede;
-      border-radius: 2px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 12px;
-      color: #4b5d5d;
-      font-size: 14px;
+    .file-dropdown a{
+      text-decoration:none;
+      color:#222;
+      font-size:13px;
+      padding:8px 14px;
+      display:block;
     }
 
-    .toolbar-right {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      color: #dff3f3;
-      font-size: 24px;
+    .file-dropdown a:hover{
+      background:#edf3f3;
     }
 
-    /* ---------------- MAIN AREA ---------------- */
-    .main {
-      flex: 1;
-      display: flex;
-      overflow: hidden;
+    /* ================= TOOLBAR ================= */
+    .toolbar{
+      height:46px;
+      background:var(--toolbar);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 12px;
+      flex-shrink:0;
+      box-shadow:inset 0 -1px 0 rgba(0,0,0,0.08);
     }
 
-    /* ---------------- SIDEBAR ---------------- */
-    .sidebar {
-      width: 52px;
-      background: #e8eded;
-      border-right: 1px solid #d9dfdf;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px 0 12px;
+    .toolbar-left{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .toolbar-btn{
+      width:30px;
+      height:30px;
+      border-radius:50%;
+      border:none;
+      background:rgba(255,255,255,0.16);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      transition:background .15s ease;
+      padding:0;
+    }
+
+    .toolbar-btn:hover{
+      background:rgba(255,255,255,0.25);
+    }
+
+    .toolbar-btn svg{
+      width:17px;
+      height:17px;
+      stroke:#d9f0f0;
+      fill:none;
+      stroke-width:2;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+
+    .board-select{
+      margin-left:8px;
+      width:255px;
+      height:32px;
+      background:#f6f9f9;
+      border:1px solid #d2dcdc;
+      border-radius:2px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 12px;
+      color:#475d5d;
+      font-size:14px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+    }
+
+    .board-select .arrow{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .board-select .arrow svg{
+      width:11px;
+      height:11px;
+      stroke:#5d7070;
+      fill:none;
+      stroke-width:2;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+
+    .toolbar-right{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .toolbar-icon-btn{
+      width:26px;
+      height:26px;
+      border:none;
+      background:transparent;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      padding:0;
+    }
+
+    .toolbar-icon-btn svg{
+      width:18px;
+      height:18px;
+      stroke:#d8efef;
+      fill:none;
+      stroke-width:2;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+
+    /* ================= MAIN AREA ================= */
+    .main{
+      flex:1;
+      display:flex;
+      min-height:0;
+      background:#fff;
+    }
+
+    /* ================= SIDEBAR ================= */
+    .sidebar{
+      width:52px;
+      background:var(--sidebar);
+      border-right:1px solid var(--sidebar-border);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      align-items:center;
+      padding:12px 0 10px;
+      flex-shrink:0;
     }
 
     .sidebar-top,
-    .sidebar-bottom {
-      display: flex;
-      flex-direction: column;
-      gap: 22px;
-      align-items: center;
+    .sidebar-bottom{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:16px;
+      width:100%;
     }
 
-    .side-icon {
-      width: 24px;
-      height: 24px;
-      opacity: 0.55;
-      position: relative;
-      cursor: pointer;
+    .side-btn{
+      width:100%;
+      height:36px;
+      border:none;
+      background:transparent;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      position:relative;
+      padding:0;
     }
 
-    .side-icon:hover {
-      opacity: 0.85;
+    .side-btn:hover{
+      background:rgba(0,0,0,0.03);
     }
 
-    /* simple icon drawings */
-    .icon-folder {
-      border: 2px solid #90a1a7;
-      border-top-left-radius: 2px;
-    }
-    .icon-folder::before {
-      content: "";
-      position: absolute;
-      top: -4px;
-      left: 1px;
-      width: 10px;
-      height: 6px;
-      border: 2px solid #90a1a7;
-      border-bottom: none;
-      border-top-left-radius: 2px;
-      border-top-right-radius: 2px;
-      background: #e8eded;
+    .side-btn.active::before{
+      content:"";
+      position:absolute;
+      left:0;
+      top:5px;
+      bottom:5px;
+      width:3px;
+      background:#0a7b7b;
+      border-radius:0 2px 2px 0;
     }
 
-    .icon-board::before,
-    .icon-board::after {
-      content: "";
-      position: absolute;
-      background: #90a1a7;
-    }
-    .icon-board::before {
-      width: 18px;
-      height: 10px;
-      border: 2px solid #90a1a7;
-      background: transparent;
-      top: 7px;
-      left: 1px;
-      border-radius: 2px;
-    }
-    .icon-board::after {
-      width: 4px;
-      height: 4px;
-      top: 2px;
-      left: 10px;
-      border-radius: 50%;
+    .side-btn svg{
+      width:24px;
+      height:24px;
+      stroke:var(--icon);
+      fill:none;
+      stroke-width:1.8;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+      transition:stroke .15s ease;
     }
 
-    .icon-books::before,
-    .icon-books::after {
-      content: "";
-      position: absolute;
-      background: transparent;
-      border: 2px solid #90a1a7;
-      border-radius: 1px;
-    }
-    .icon-books::before {
-      width: 5px;
-      height: 22px;
-      left: 2px;
-      top: 1px;
-    }
-    .icon-books::after {
-      width: 5px;
-      height: 18px;
-      left: 10px;
-      top: 5px;
-      box-shadow: 8px 0 0 0 transparent;
-    }
-    .icon-books span {
-      position: absolute;
-      right: 1px;
-      top: 3px;
-      width: 5px;
-      height: 20px;
-      border: 2px solid #90a1a7;
-      border-radius: 1px;
+    .side-btn:hover svg{
+      stroke:var(--icon-hover);
     }
 
-    .icon-debug {
-      border: 2px solid #90a1a7;
-      border-radius: 50%;
-    }
-    .icon-debug::before {
-      content: "";
-      position: absolute;
-      width: 12px;
-      height: 2px;
-      background: #90a1a7;
-      transform: rotate(-45deg);
-      top: 10px;
-      left: 4px;
+    /* ================= RIGHT PANEL ================= */
+    .workspace{
+      flex:1;
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      background:#fff;
     }
 
-    .icon-search {
-      border: 2px solid #90a1a7;
-      border-radius: 50%;
-    }
-    .icon-search::before {
-      content: "";
-      position: absolute;
-      width: 10px;
-      height: 2px;
-      background: #90a1a7;
-      transform: rotate(45deg);
-      right: -2px;
-      bottom: 1px;
+    .tabbar{
+      height:34px;
+      background:var(--tabbar);
+      border-bottom:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 8px 0 8px;
+      flex-shrink:0;
     }
 
-    .icon-user {
-      border: 2px solid #90a1a7;
-      border-radius: 50%;
-    }
-    .icon-user::before {
-      content: "";
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      border: 2px solid #90a1a7;
-      border-radius: 50%;
-      top: 2px;
-      left: 6px;
-      background: transparent;
-    }
-    .icon-user::after {
-      content: "";
-      position: absolute;
-      width: 12px;
-      height: 6px;
-      border: 2px solid #90a1a7;
-      border-top-left-radius: 10px;
-      border-top-right-radius: 10px;
-      border-bottom: none;
-      left: 4px;
-      bottom: 2px;
+    .tab-left{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      min-width:0;
     }
 
-    /* ---------------- EDITOR PANEL ---------------- */
-    .editor-wrap {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background: #ffffff;
+    .tab-file{
+      font-size:14px;
+      color:#445454;
+      white-space:nowrap;
     }
 
-    .file-tab {
-      height: 34px;
-      background: #eef2f2;
-      border-bottom: 1px solid #dde3e3;
-      display: flex;
-      align-items: center;
-      padding: 0 10px;
-      font-size: 14px;
-      color: #3d4b4b;
-      gap: 8px;
+    .tab-right{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:20px;
+      height:20px;
+      color:#667;
+      cursor:pointer;
     }
 
-    .file-tab .file-name {
-      font-weight: 500;
+    .tab-right svg{
+      width:14px;
+      height:14px;
+      stroke:#667;
+      fill:none;
+      stroke-width:2;
+      stroke-linecap:round;
+      stroke-linejoin:round;
     }
 
-    .editor {
-      flex: 1;
-      display: flex;
-      background: #ffffff;
-      font-family: Consolas, "Courier New", monospace;
-      overflow: hidden;
-    }
-
-    .line-numbers {
-      width: 60px;
-      background: #ffffff;
-      color: #1b78a3;
-      padding-top: 10px;
-      text-align: right;
-      padding-right: 18px;
-      font-size: 14px;
-      line-height: 42px;
-      user-select: none;
-    }
-
-    .code-area {
-      flex: 1;
-      padding: 10px 0 0 14px;
-      font-size: 16px;
-      line-height: 42px;
-      color: #4a5a5a;
-      white-space: pre;
+    /* ================= EDITOR ================= */
+    .editor{
+      flex:1;
+      min-height:0;
+      display:flex;
+      background:var(--editor-bg);
+      overflow:hidden;
       font-family: Consolas, "Courier New", monospace;
     }
 
-    .kw {
-      color: #0b8bb4;
+    .line-numbers{
+      width:60px;
+      flex-shrink:0;
+      padding-top:8px;
+      padding-right:16px;
+      text-align:right;
+      font-size:14px;
+      line-height:31px;
+      color:var(--editor-line);
+      background:#fff;
+      user-select:none;
     }
 
-    .fn {
-      color: #6f4aa5;
+    .code-pane{
+      flex:1;
+      min-width:0;
+      padding-top:8px;
+      padding-left:14px;
+      font-size:14px;
+      line-height:31px;
+      color:var(--editor-text);
+      white-space:pre;
+      overflow:hidden;
     }
 
-    .comment {
-      color: #8aa0a0;
+    .kw{ color:var(--editor-key); }
+    .fn{ color:var(--editor-fn); }
+    .comment{ color:var(--editor-comment); }
+
+    /* right gutter to mimic IDE */
+    .editor::after{
+      content:"";
+      width:8px;
+      border-left:1px solid #f0f2f2;
+      background:#fff;
+      flex-shrink:0;
     }
 
-    /* ---------------- STATUS BAR ---------------- */
-    .status-bar {
-      height: 24px;
-      background: #007a7c;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 16px;
-      padding: 0 12px;
-      font-size: 12px;
+    /* ================= STATUS BAR ================= */
+    .statusbar{
+      height:24px;
+      background:var(--status);
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:14px;
+      padding:0 10px;
+      color:#ffffff;
+      font-size:12px;
+      flex-shrink:0;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.05);
     }
 
-    .status-bar .bell {
-      font-size: 14px;
+    .status-item{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      white-space:nowrap;
+    }
+
+    .status-icon{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .status-icon svg{
+      width:13px;
+      height:13px;
+      stroke:#ffffff;
+      fill:none;
+      stroke-width:2;
+      stroke-linecap:round;
+      stroke-linejoin:round;
     }
   </style>
 </head>
 <body>
-  <div class="app">
+  <div class="window">
     <!-- TITLE BAR -->
-    <div class="title-bar">
+    <div class="titlebar">
       <div class="title-left">
-        <div class="logo"></div>
-        <div>sketch_apr28a | Arduino IDE 2.3.7</div>
+        <div class="arduino-app-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M5 12c0-2 1.5-3.5 3.5-3.5S12 10 12 12s-1.5 3.5-3.5 3.5S5 14 5 12Z" fill="none" stroke="#fff" stroke-width="1.8"/>
+            <path d="M12 12c0-2 1.5-3.5 3.5-3.5S19 10 19 12s-1.5 3.5-3.5 3.5S12 14 12 12Z" fill="none" stroke="#fff" stroke-width="1.8"/>
+            <path d="M7.4 12h2.3M15.1 10.8v2.4M13.9 12h2.4" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="window-title">sketch_apr28a | Arduino IDE 2.3.7</div>
       </div>
+
       <div class="window-controls">
-        <div class="window-btn">─</div>
-        <div class="window-btn">▢</div>
-        <div class="window-btn close">✕</div>
+        <button class="win-btn" type="button" aria-label="Minimize">
+          <svg viewBox="0 0 10 10"><path d="M1 5h8" stroke="currentColor" stroke-width="1.2"/></svg>
+        </button>
+        <button class="win-btn" type="button" aria-label="Maximize">
+          <svg viewBox="0 0 10 10"><rect x="1.5" y="1.5" width="7" height="7" stroke="currentColor" fill="none" stroke-width="1.1"/></svg>
+        </button>
+        <button class="win-btn close" type="button" aria-label="Close">
+          <svg viewBox="0 0 10 10"><path d="M2 2l6 6M8 2L2 8" stroke="currentColor" stroke-width="1.2"/></svg>
+        </button>
       </div>
     </div>
 
     <!-- MENU BAR -->
-    <div class="menu-bar">
-      <div class="menu-item">File</div>
+    <div class="menubar">
+      <div class="menu-item" id="fileMenuBtn">File</div>
       <div class="menu-item">Edit</div>
       <div class="menu-item">Sketch</div>
       <div class="menu-item">Tools</div>
       <div class="menu-item">Help</div>
+
+      <!-- File dropdown -->
+      <div class="file-dropdown" id="fileDropdown">
+        <a href="file.html">Open Sketchbook</a>
+        <a href="file.html">Open Recent</a>
+        <a href="file.html">Open File Manager</a>
+      </div>
     </div>
 
     <!-- TOOLBAR -->
     <div class="toolbar">
       <div class="toolbar-left">
-        <div class="circle-btn">✓</div>
-        <div class="circle-btn">→</div>
-        <div class="circle-btn">⇆</div>
+        <!-- Verify -->
+        <button class="toolbar-btn" type="button" aria-label="Verify">
+          <svg viewBox="0 0 24 24">
+            <path d="M5 12l4 4 10-10"></path>
+          </svg>
+        </button>
 
-        <div class="board-select">
+        <!-- Upload -->
+        <button class="toolbar-btn" type="button" aria-label="Upload">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 16V6"></path>
+            <path d="M8 10l4-4 4 4"></path>
+            <path d="M5 18h14"></path>
+          </svg>
+        </button>
+
+        <!-- Debug/Serial -->
+        <button class="toolbar-btn" type="button" aria-label="Debug">
+          <svg viewBox="0 0 24 24">
+            <path d="M8 7l8 5-8 5V7z"></path>
+            <path d="M5 5l2 2M17 17l2 2M19 5l-2 2M5 19l2-2"></path>
+          </svg>
+        </button>
+
+        <div class="board-select" role="button" tabindex="0" aria-label="Select Board">
           <span>Select Board</span>
-          <span>▼</span>
+          <span class="arrow">
+            <svg viewBox="0 0 24 24">
+              <path d="M6 9l6 6 6-6"></path>
+            </svg>
+          </span>
         </div>
       </div>
 
       <div class="toolbar-right">
-        <span>∿</span>
-        <span>⚙</span>
-        <span style="font-size:18px;">⋯</span>
+        <!-- waveform -->
+        <button class="toolbar-icon-btn" type="button" aria-label="Monitor">
+          <svg viewBox="0 0 24 24">
+            <path d="M3 13h4l2-7 4 12 2-7h6"></path>
+          </svg>
+        </button>
+
+        <!-- settings -->
+        <button class="toolbar-icon-btn" type="button" aria-label="Settings">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1L7 17M17 7l2.1-2.1"></path>
+          </svg>
+        </button>
+
+        <!-- more -->
+        <button class="toolbar-icon-btn" type="button" aria-label="More">
+          <svg viewBox="0 0 24 24">
+            <circle cx="5" cy="12" r="1.2" fill="#d8efef" stroke="none"></circle>
+            <circle cx="12" cy="12" r="1.2" fill="#d8efef" stroke="none"></circle>
+            <circle cx="19" cy="12" r="1.2" fill="#d8efef" stroke="none"></circle>
+          </svg>
+        </button>
       </div>
     </div>
 
     <!-- MAIN -->
     <div class="main">
       <!-- SIDEBAR -->
-      <div class="sidebar">
+      <aside class="sidebar">
         <div class="sidebar-top">
-          <div class="side-icon icon-folder"></div>
-          <div class="side-icon icon-board"></div>
-          <div class="side-icon icon-books"><span></span></div>
-          <div class="side-icon icon-debug"></div>
-          <div class="side-icon icon-search"></div>
+          <!-- File/Folder -->
+          <button class="side-btn active" id="folderBtn" type="button" aria-label="Files">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 7h6l2 2h10v8a2 2 0 0 1-2 2H3z"></path>
+              <path d="M3 7v10"></path>
+            </svg>
+          </button>
+
+          <!-- Board -->
+          <button class="side-btn" type="button" aria-label="Boards">
+            <svg viewBox="0 0 24 24">
+              <rect x="5" y="7" width="14" height="10" rx="1"></rect>
+              <path d="M9 4v3M15 4v3M9 17v3M15 17v3M3 10h2M3 14h2M19 10h2M19 14h2"></path>
+            </svg>
+          </button>
+
+          <!-- Library -->
+          <button class="side-btn" type="button" aria-label="Library">
+            <svg viewBox="0 0 24 24">
+              <path d="M5 4h4v16H5z"></path>
+              <path d="M10 6h4v14h-4z"></path>
+              <path d="M15 8h4v12h-4z"></path>
+            </svg>
+          </button>
+
+          <!-- Debug -->
+          <button class="side-btn" type="button" aria-label="Debug">
+            <svg viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="M20 20l-4-4"></path>
+              <path d="M8 14l6-6"></path>
+            </svg>
+          </button>
+
+          <!-- Search -->
+          <button class="side-btn" type="button" aria-label="Search">
+            <svg viewBox="0 0 24 24">
+              <circle cx="10" cy="10" r="7"></circle>
+              <path d="M15.5 15.5L21 21"></path>
+            </svg>
+          </button>
         </div>
 
         <div class="sidebar-bottom">
-          <div class="side-icon icon-user"></div>
+          <!-- Account -->
+          <button class="side-btn" type="button" aria-label="Account">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="8" r="4"></circle>
+              <path d="M4 20c1.5-4 14.5-4 16 0"></path>
+            </svg>
+          </button>
         </div>
-      </div>
+      </aside>
 
-      <!-- EDITOR -->
-      <div class="editor-wrap">
-        <div class="file-tab">
-          <span class="file-name">sketch_apr28a.ino</span>
+      <!-- WORKSPACE -->
+      <section class="workspace">
+        <!-- TAB BAR -->
+        <div class="tabbar">
+          <div class="tab-left">
+            <div class="tab-file">sketch_apr28a.ino</div>
+          </div>
+          <div class="tab-right" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M7 10l5 5 5-5"></path>
+            </svg>
+          </div>
         </div>
 
+        <!-- EDITOR -->
         <div class="editor">
           <div class="line-numbers">1
 2
@@ -500,7 +702,7 @@
 9
 10</div>
 
-          <div class="code-area"><span class="kw">void</span> <span class="fn">setup</span>() {
+          <div class="code-pane"><span class="kw">void</span> <span class="fn">setup</span>() {
   <span class="comment">// put your setup code here, to run once:</span>
 
 }
@@ -510,15 +712,64 @@
 
 }</div>
         </div>
-      </div>
+      </section>
     </div>
 
     <!-- STATUS BAR -->
-    <div class="status-bar">
-      <span>Ln 1, Col 1</span>
-      <span>✕ No board selected</span>
-      <span class="bell">🔔</span>
+    <div class="statusbar">
+      <div class="status-item">Ln 1, Col 1</div>
+      <div class="status-item">
+        <span class="status-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M8 8l8 8"></path>
+            <path d="M16 8l-8 8"></path>
+          </svg>
+        </span>
+        <span>No board selected</span>
+      </div>
+      <div class="status-item">
+        <span class="status-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 21c1.2 0 2-.8 2-2h-4c0 1.2.8 2 2 2z"></path>
+            <path d="M18 16H6l1.5-2.2V10a4.5 4.5 0 1 1 9 0v3.8L18 16z"></path>
+          </svg>
+        </span>
+      </div>
     </div>
   </div>
+
+  <script>
+    const fileMenuBtn = document.getElementById("fileMenuBtn");
+    const fileDropdown = document.getElementById("fileDropdown");
+    const folderBtn = document.getElementById("folderBtn");
+
+    // Clicking File toggles dropdown, second click navigates (fast access)
+    fileMenuBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+
+      if (fileDropdown.classList.contains("show")) {
+        window.location.href = "file.html";
+      } else {
+        fileDropdown.classList.add("show");
+        fileMenuBtn.classList.add("active");
+      }
+    });
+
+    // Clicking folder opens file.html directly
+    folderBtn.addEventListener("click", function () {
+      window.location.href = "file.html";
+    });
+
+    // Clicking dropdown links should navigate normally
+    fileDropdown.addEventListener("click", function (e) {
+      e.stopPropagation();
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener("click", function () {
+      fileDropdown.classList.remove("show");
+      fileMenuBtn.classList.remove("active");
+    });
+  </script>
 </body>
 </html>
