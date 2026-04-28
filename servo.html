@@ -51,7 +51,6 @@
       overflow:hidden;
     }
 
-    /* TITLE BAR */
     .titlebar{
       height:32px;
       background:var(--titlebar);
@@ -123,7 +122,6 @@
       display:block;
     }
 
-    /* MENU BAR */
     .menubar{
       height:22px;
       background:var(--menubar);
@@ -147,7 +145,6 @@
       background:#f1f3f3;
     }
 
-    /* TOOLBAR */
     .toolbar{
       height:46px;
       background:var(--toolbar);
@@ -242,7 +239,6 @@
       stroke-linejoin:round;
     }
 
-    /* MAIN */
     .main{
       flex:1;
       display:flex;
@@ -250,7 +246,6 @@
       background:#fff;
     }
 
-    /* SIDEBAR */
     .sidebar{
       width:52px;
       background:var(--sidebar);
@@ -314,7 +309,6 @@
       stroke:var(--icon-hover);
     }
 
-    /* WORKSPACE */
     .workspace{
       flex:1;
       min-width:0;
@@ -348,7 +342,6 @@
       stroke-width:2;
     }
 
-    /* EDITOR */
     .editor{
       flex:1;
       min-height:0;
@@ -370,6 +363,7 @@
       background:#fff;
       user-select:none;
       overflow:hidden;
+      white-space:pre;
     }
 
     .code-pane{
@@ -413,7 +407,6 @@
       flex-shrink:0;
     }
 
-    /* STATUS BAR */
     .statusbar{
       height:24px;
       background:var(--status);
@@ -447,7 +440,6 @@
 </head>
 <body>
   <div class="window">
-    <!-- TITLE BAR -->
     <div class="titlebar">
       <div class="title-left">
         <div class="arduino-app-icon">
@@ -461,19 +453,12 @@
       </div>
 
       <div class="window-controls">
-        <button class="win-btn" type="button">
-          <svg viewBox="0 0 10 10"><path d="M1 5h8" stroke="currentColor" stroke-width="1.2"/></svg>
-        </button>
-        <button class="win-btn" type="button">
-          <svg viewBox="0 0 10 10"><rect x="1.5" y="1.5" width="7" height="7" stroke="currentColor" fill="none" stroke-width="1.1"/></svg>
-        </button>
-        <button class="win-btn close" type="button">
-          <svg viewBox="0 0 10 10"><path d="M2 2l6 6M8 2L2 8" stroke="currentColor" stroke-width="1.2"/></svg>
-        </button>
+        <button class="win-btn" type="button"><svg viewBox="0 0 10 10"><path d="M1 5h8" stroke="currentColor" stroke-width="1.2"/></svg></button>
+        <button class="win-btn" type="button"><svg viewBox="0 0 10 10"><rect x="1.5" y="1.5" width="7" height="7" stroke="currentColor" fill="none" stroke-width="1.1"/></svg></button>
+        <button class="win-btn close" type="button"><svg viewBox="0 0 10 10"><path d="M2 2l6 6M8 2L2 8" stroke="currentColor" stroke-width="1.2"/></svg></button>
       </div>
     </div>
 
-    <!-- MENU BAR -->
     <div class="menubar">
       <div class="menu-item" onclick="window.location.href='file.html'">File</div>
       <div class="menu-item">Edit</div>
@@ -482,25 +467,11 @@
       <div class="menu-item">Help</div>
     </div>
 
-    <!-- TOOLBAR -->
     <div class="toolbar">
       <div class="toolbar-left">
-        <button class="toolbar-btn" type="button">
-          <svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"></path></svg>
-        </button>
-        <button class="toolbar-btn" type="button">
-          <svg viewBox="0 0 24 24">
-            <path d="M12 16V6"></path>
-            <path d="M8 10l4-4 4 4"></path>
-            <path d="M5 18h14"></path>
-          </svg>
-        </button>
-        <button class="toolbar-btn" type="button">
-          <svg viewBox="0 0 24 24">
-            <path d="M8 7l8 5-8 5V7z"></path>
-            <path d="M5 5l2 2M17 17l2 2M19 5l-2 2M5 19l2-2"></path>
-          </svg>
-        </button>
+        <button class="toolbar-btn" type="button"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"></path></svg></button>
+        <button class="toolbar-btn" type="button"><svg viewBox="0 0 24 24"><path d="M12 16V6"></path><path d="M8 10l4-4 4 4"></path><path d="M5 18h14"></path></svg></button>
+        <button class="toolbar-btn" type="button"><svg viewBox="0 0 24 24"><path d="M8 7l8 5-8 5V7z"></path><path d="M5 5l2 2M17 17l2 2M19 5l-2 2M5 19l2-2"></path></svg></button>
 
         <div class="board-select">
           <span>Select Board</span>
@@ -511,28 +482,13 @@
       </div>
 
       <div class="toolbar-right">
-        <button class="toolbar-icon-btn" type="button">
-          <svg viewBox="0 0 24 24"><path d="M3 13h4l2-7 4 12 2-7h6"></path></svg>
-        </button>
-        <button class="toolbar-icon-btn" type="button">
-          <svg viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="3"></circle>
-            <path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1L7 17M17 7l2.1-2.1"></path>
-          </svg>
-        </button>
-        <button class="toolbar-icon-btn" type="button">
-          <svg viewBox="0 0 24 24">
-            <circle cx="5" cy="12" r="1.2" fill="#d8efef" stroke="none"></circle>
-            <circle cx="12" cy="12" r="1.2" fill="#d8efef" stroke="none"></circle>
-            <circle cx="19" cy="12" r="1.2" fill="#d8efef" stroke="none"></circle>
-          </svg>
-        </button>
+        <button class="toolbar-icon-btn" type="button"><svg viewBox="0 0 24 24"><path d="M3 13h4l2-7 4 12 2-7h6"></path></svg></button>
+        <button class="toolbar-icon-btn" type="button"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1L7 17M17 7l2.1-2.1"></path></svg></button>
+        <button class="toolbar-icon-btn" type="button"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2" fill="#d8efef" stroke="none"></circle><circle cx="12" cy="12" r="1.2" fill="#d8efef" stroke="none"></circle><circle cx="19" cy="12" r="1.2" fill="#d8efef" stroke="none"></circle></svg></button>
       </div>
     </div>
 
-    <!-- MAIN -->
     <div class="main">
-      <!-- SIDEBAR -->
       <aside class="sidebar">
         <div class="sidebar-top">
           <button class="side-btn active" onclick="window.location.href='file.html'">
@@ -583,7 +539,6 @@
         </div>
       </aside>
 
-      <!-- WORKSPACE -->
       <section class="workspace">
         <div class="tabbar">
           <div class="tab-file">servo.ino</div>
@@ -599,7 +554,6 @@
       </section>
     </div>
 
-    <!-- STATUS BAR -->
     <div class="statusbar">
       <div class="status-item">Ln 1, Col 1</div>
       <div class="status-item">
@@ -626,104 +580,85 @@
     const rawCode = `#include <Arduino.h>
 #include <WiFi.h>
 #include <PubSubClient.h>
-#include <DHT.h>
 
 WiFiClient wifiClient;
 PubSubClient mqttClient(wifiClient);
 
-#define DHTPIN 4
-#define DHTTYPE DHT11
-
-DHT dht(DHTPIN, DHTTYPE);
-
-const char* ssid = "N Lalitta";
-const char* password = "aslalitta";
-
+const char* ssid = "Redmi 12 5G";
+const char* password = "9xhv563w2vnx4bn";
 char* mqttServer = "test.mosquitto.org";
 int mqttPort = 1883;
 
 void callback(char* topic, byte* message, unsigned int length) {
-    Serial.print("Message received on topic: ");
-    Serial.println(topic);
+  Serial.print("Message received on topic: ");
+  Serial.println(topic);
 
-    String messageTemp;
+  String messageTemp = "";
+  for (int i = 0; i < length; i++) {
+    messageTemp += (char)message[i];
+  }
 
-    for (int i = 0; i < length; i++) {
-        messageTemp += (char)message[i];
-    }
+  if (String(topic) == "esp32/temperature") {
+    Serial.print("Temperature: ");
+    Serial.println(messageTemp);
+  }
 
-    if (String(topic) == "esp32/request_t") {
-        float t = dht.readTemperature();
-
-        if (!isnan(t)) {
-            char tempString[8];
-            dtostrf(t, 1, 2, tempString);
-
-            Serial.print("Publishing Temperature: ");
-            Serial.println(tempString);
-
-            mqttClient.publish("esp32/temperature", tempString);
-        }
-    }
-
-    if (String(topic) == "esp32/request_h") {
-        float h = dht.readHumidity();
-
-        if (!isnan(h)) {
-            char humString[8];
-            dtostrf(h, 1, 2, humString);
-
-            Serial.print("Publishing Humidity: ");
-            Serial.println(humString);
-
-            mqttClient.publish("esp32/humidity", humString);
-        }
-    }
+  if (String(topic) == "esp32/humidity") {
+    Serial.print("Humidity: ");
+    Serial.println(messageTemp);
+  }
 }
 
 void reconnect() {
-    while (!mqttClient.connected()) {
-        Serial.print("Connecting to MQTT...");
-
-        if (mqttClient.connect("ESP32Publisher")) {
-            Serial.println("Connected");
-
-            mqttClient.subscribe("esp32/request_t");
-            mqttClient.subscribe("esp32/request_h");
-        } 
-        else {
-            Serial.print("Failed, Error Code: ");
-            Serial.println(mqttClient.state());
-
-            delay(2000);
-        }
+  while (!mqttClient.connected()) {
+    Serial.print("Connecting to MQTT...");
+    if (mqttClient.connect("ESP32Subscriber")) {
+      Serial.println("Connected");
+      mqttClient.subscribe("esp32/temperature");
+      mqttClient.subscribe("esp32/humidity");
+    } else {
+      Serial.print("Failed, Error Code: ");
+      Serial.println(mqttClient.state());
+      delay(2000);
     }
+  }
 }
 
 void setup() {
-    Serial.begin(9600);
+  Serial.begin(9600);
+  WiFi.begin(ssid, password);
 
-    dht.begin();
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
 
-    WiFi.begin(ssid, password);
+  Serial.println("\\nConnected to Wi-Fi");
 
-    while (WiFi.status() != WL_CONNECTED) {
-        delay(500);
-        Serial.print(".");
-    }
-
-    Serial.println("\\nConnected to Wi-Fi");
-
-    mqttClient.setServer(mqttServer, mqttPort);
-    mqttClient.setCallback(callback);
+  mqttClient.setServer(mqttServer, mqttPort);
+  mqttClient.setCallback(callback);
 }
 
 void loop() {
-    if (!mqttClient.connected()) {
-        reconnect();
-    }
+  if (!mqttClient.connected()) reconnect();
+  mqttClient.loop();
 
-    mqttClient.loop();
+  if (Serial.available()) {
+    String input = Serial.readStringUntil('\\n');
+    input.trim();
+
+    if (input == "esp32/t") {
+      Serial.println("Requesting Temperature...");
+      mqttClient.publish("esp32/request_t", "");
+    } 
+    else if (input == "esp32/h") {
+      Serial.println("Requesting Humidity...");
+      mqttClient.publish("esp32/request_h", "");
+    } 
+    else {
+      Serial.println("Invalid command! Use: esp32/t or esp32/h");
+    }
+  }
 }`;
 
     function escapeHtml(str) {
@@ -736,21 +671,17 @@ void loop() {
     function highlightCode(code) {
       let escaped = escapeHtml(code);
 
-      // comments
       escaped = escaped.replace(/(\/\/.*)/g, '<span class="comment">$1</span>');
 
-      // preprocessor
       escaped = escaped.replace(/(^|\n)(#include|#define)(.*)/g, function(match, p1, p2, p3){
         return p1 + '<span class="pre">' + p2 + p3 + '</span>';
       });
 
-      // strings
       escaped = escaped.replace(/"([^"\\]|\\.)*"/g, function(m){
         return '<span class="str">' + m + '</span>';
       });
 
-      // keywords
-      escaped = escaped.replace(/\b(void|char|const|unsigned|int|while|if|else|return|for|float)\b/g, '<span class="kw">$1</span>');
+      escaped = escaped.replace(/\b(void|char|const|unsigned|int|while|if|else|return|for)\b/g, '<span class="kw">$1</span>');
 
       return escaped;
     }
