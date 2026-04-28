@@ -9,26 +9,33 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      font-family: "Segoe UI", Arial, sans-serif;
     }
 
-    
     body {
       background: #ffffff;
       overflow: hidden;
     }
 
-    /* WINDOW TITLE BAR */
+    .app {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+    }
+
+    /* ---------------- TITLE BAR ---------------- */
     .title-bar {
       height: 32px;
-      background: #e9e5db;
+      background: #ece7e1;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 10px;
-      border-bottom: 1px solid #d3d0c7;
+      padding: 0 0 0 8px;
       font-size: 14px;
       color: #222;
+      border-bottom: 1px solid #ddd;
     }
 
     .title-left {
@@ -37,49 +44,76 @@
       gap: 8px;
     }
 
-    .title-icon {
+    .title-left .logo {
       width: 18px;
       height: 18px;
+      background: #008184;
       border-radius: 4px;
-      background: #4b9c9b;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 12px;
+      position: relative;
+    }
+
+    .title-left .logo::before {
+      content: "∞";
+      position: absolute;
+      color: #fff;
+      font-size: 13px;
       font-weight: bold;
+      top: -1px;
+      left: 2px;
     }
 
     .window-controls {
       display: flex;
-      align-items: center;
-      gap: 18px;
-      font-size: 18px;
-      color: #222;
-      user-select: none;
+      height: 100%;
     }
 
-    /* MENU BAR */
-    .menu-bar {
-      height: 34px;
-      background: #ffffff;
+    .window-btn {
+      width: 46px;
+      height: 100%;
       display: flex;
       align-items: center;
-      gap: 22px;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      color: #222;
+    }
+
+    .window-btn:hover {
+      background: #ddd;
+    }
+
+    .window-btn.close:hover {
+      background: #e81123;
+      color: #fff;
+    }
+
+    /* ---------------- MENU BAR ---------------- */
+    .menu-bar {
+      height: 30px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
       padding: 0 8px;
-      font-size: 18px;
-      border-bottom: 1px solid #d9d9d9;
-      color: #333;
+      font-size: 14px;
+      color: #1e1e1e;
+      background: #ffffff;
+      border-bottom: 1px solid #e6e6e6;
     }
 
     .menu-item {
-      cursor: default;
+      cursor: pointer;
     }
 
-    /* TOP TOOLBAR */
-    .top-toolbar {
-      height: 54px;
-      background: #006d70;
+    .menu-item:hover {
+      background: #f2f2f2;
+      padding: 3px 4px;
+      border-radius: 3px;
+    }
+
+    /* ---------------- TOP TOOLBAR ---------------- */
+    .toolbar {
+      height: 46px;
+      background: #007a7c;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -89,259 +123,373 @@
     .toolbar-left {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .circle-btn {
-      width: 34px;
-      height: 34px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
-      background: #79c7c6;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.15);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #0c5d5f;
-      font-size: 18px;
-      font-weight: bold;
+      color: #d9f0ef;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .circle-btn:hover {
+      background: rgba(255,255,255,0.25);
     }
 
     .board-select {
       margin-left: 8px;
       width: 255px;
-      height: 36px;
-      background: #ffffff;
+      height: 32px;
+      background: #f2f5f5;
+      border: 1px solid #d5dede;
       border-radius: 2px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 12px;
-      color: #5f5f5f;
-      font-size: 16px;
+      color: #4b5d5d;
+      font-size: 14px;
     }
 
     .toolbar-right {
       display: flex;
       align-items: center;
-      gap: 20px;
-      color: #d5f3f2;
-      font-size: 22px;
-      font-weight: 500;
+      gap: 14px;
+      color: #dff3f3;
+      font-size: 24px;
     }
 
-    /* MAIN APP AREA */
-    .app {
+    /* ---------------- MAIN AREA ---------------- */
+    .main {
+      flex: 1;
       display: flex;
-      height: calc(100vh - 120px);
-      width: 100%;
+      overflow: hidden;
     }
 
-    /* LEFT SIDEBAR */
+    /* ---------------- SIDEBAR ---------------- */
     .sidebar {
       width: 52px;
-      background: #dfe6e5;
-      border-right: 1px solid #cfd5d4;
+      background: #e8eded;
+      border-right: 1px solid #d9dfdf;
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
       align-items: center;
-      padding-top: 14px;
-      position: relative;
+      padding: 14px 0 12px;
+    }
+
+    .sidebar-top,
+    .sidebar-bottom {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      align-items: center;
     }
 
     .side-icon {
-      width: 100%;
-      height: 54px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #9aa4a3;
-      font-size: 28px;
-      cursor: default;
+      width: 24px;
+      height: 24px;
+      opacity: 0.55;
+      position: relative;
+      cursor: pointer;
     }
 
-    .side-icon.active {
-      color: #8a9695;
+    .side-icon:hover {
+      opacity: 0.85;
     }
 
-    .sidebar-bottom {
+    /* simple icon drawings */
+    .icon-folder {
+      border: 2px solid #90a1a7;
+      border-top-left-radius: 2px;
+    }
+    .icon-folder::before {
+      content: "";
       position: absolute;
-      bottom: 12px;
-      width: 100%;
+      top: -4px;
+      left: 1px;
+      width: 10px;
+      height: 6px;
+      border: 2px solid #90a1a7;
+      border-bottom: none;
+      border-top-left-radius: 2px;
+      border-top-right-radius: 2px;
+      background: #e8eded;
     }
 
-    /* EDITOR AREA */
-    .editor-wrapper {
+    .icon-board::before,
+    .icon-board::after {
+      content: "";
+      position: absolute;
+      background: #90a1a7;
+    }
+    .icon-board::before {
+      width: 18px;
+      height: 10px;
+      border: 2px solid #90a1a7;
+      background: transparent;
+      top: 7px;
+      left: 1px;
+      border-radius: 2px;
+    }
+    .icon-board::after {
+      width: 4px;
+      height: 4px;
+      top: 2px;
+      left: 10px;
+      border-radius: 50%;
+    }
+
+    .icon-books::before,
+    .icon-books::after {
+      content: "";
+      position: absolute;
+      background: transparent;
+      border: 2px solid #90a1a7;
+      border-radius: 1px;
+    }
+    .icon-books::before {
+      width: 5px;
+      height: 22px;
+      left: 2px;
+      top: 1px;
+    }
+    .icon-books::after {
+      width: 5px;
+      height: 18px;
+      left: 10px;
+      top: 5px;
+      box-shadow: 8px 0 0 0 transparent;
+    }
+    .icon-books span {
+      position: absolute;
+      right: 1px;
+      top: 3px;
+      width: 5px;
+      height: 20px;
+      border: 2px solid #90a1a7;
+      border-radius: 1px;
+    }
+
+    .icon-debug {
+      border: 2px solid #90a1a7;
+      border-radius: 50%;
+    }
+    .icon-debug::before {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 2px;
+      background: #90a1a7;
+      transform: rotate(-45deg);
+      top: 10px;
+      left: 4px;
+    }
+
+    .icon-search {
+      border: 2px solid #90a1a7;
+      border-radius: 50%;
+    }
+    .icon-search::before {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 2px;
+      background: #90a1a7;
+      transform: rotate(45deg);
+      right: -2px;
+      bottom: 1px;
+    }
+
+    .icon-user {
+      border: 2px solid #90a1a7;
+      border-radius: 50%;
+    }
+    .icon-user::before {
+      content: "";
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border: 2px solid #90a1a7;
+      border-radius: 50%;
+      top: 2px;
+      left: 6px;
+      background: transparent;
+    }
+    .icon-user::after {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 6px;
+      border: 2px solid #90a1a7;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      border-bottom: none;
+      left: 4px;
+      bottom: 2px;
+    }
+
+    /* ---------------- EDITOR PANEL ---------------- */
+    .editor-wrap {
       flex: 1;
       display: flex;
       flex-direction: column;
       background: #ffffff;
     }
 
-    .tab-bar {
-      height: 28px;
+    .file-tab {
+      height: 34px;
+      background: #eef2f2;
+      border-bottom: 1px solid #dde3e3;
       display: flex;
       align-items: center;
-      padding-left: 8px;
+      padding: 0 10px;
       font-size: 14px;
-      color: #444;
-      border-bottom: 1px solid #e2e2e2;
-      background: #ffffff;
+      color: #3d4b4b;
+      gap: 8px;
+    }
+
+    .file-tab .file-name {
+      font-weight: 500;
     }
 
     .editor {
       flex: 1;
-      background: #ffffff;
       display: flex;
-      position: relative;
+      background: #ffffff;
+      font-family: Consolas, "Courier New", monospace;
       overflow: hidden;
     }
 
     .line-numbers {
-      width: 54px;
+      width: 60px;
       background: #ffffff;
-      color: #2e78b8;
-      padding-top: 12px;
+      color: #1b78a3;
+      padding-top: 10px;
       text-align: right;
-      padding-right: 12px;
-      font-size: 16px;
-      line-height: 1.9;
+      padding-right: 18px;
+      font-size: 14px;
+      line-height: 42px;
       user-select: none;
     }
 
     .code-area {
       flex: 1;
-      padding: 10px 0 0 10px;
-      font-family: Consolas, "Courier New", monospace;
+      padding: 10px 0 0 14px;
       font-size: 16px;
-      line-height: 1.9;
-      color: #3d3d3d;
+      line-height: 42px;
+      color: #4a5a5a;
       white-space: pre;
-      position: relative;
+      font-family: Consolas, "Courier New", monospace;
     }
 
-    .keyword {
-      color: #0b8fb0;
-      font-weight: 500;
+    .kw {
+      color: #0b8bb4;
+    }
+
+    .fn {
+      color: #6f4aa5;
     }
 
     .comment {
-      color: #97a3a5;
+      color: #8aa0a0;
     }
 
-    .highlight-cursor {
-      position: absolute;
-      top: 14px;
-      left: 2px;
-      width: 2px;
-      height: 22px;
-      background: #1fa2a6;
-    }
-
-    /* BOTTOM STATUS BAR */
+    /* ---------------- STATUS BAR ---------------- */
     .status-bar {
-      height: 28px;
-      background: #006d70;
+      height: 24px;
+      background: #007a7c;
+      color: #ffffff;
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      gap: 18px;
-      padding: 0 14px;
-      color: #ffffff;
+      gap: 16px;
+      padding: 0 12px;
+      font-size: 12px;
+    }
+
+    .status-bar .bell {
       font-size: 14px;
-    }
-
-    .status-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    /* simple responsive */
-    @media (max-width: 900px) {
-      .board-select {
-        width: 180px;
-      }
-
-      .menu-bar {
-        gap: 12px;
-        font-size: 14px;
-      }
-
-      .line-numbers {
-        width: 42px;
-        font-size: 14px;
-      }
-
-      .code-area {
-        font-size: 14px;
-      }
     }
   </style>
 </head>
 <body>
-
-  <!-- WINDOW TITLE BAR -->
-  <div class="title-bar">
-    <div class="title-left">
-      <div class="title-icon">∞</div>
-      <div>sketch_apr28a | Arduino IDE 2.3.7</div>
-    </div>
-    <div class="window-controls">
-      <span>−</span>
-      <span>□</span>
-      <span>✕</span>
-    </div>
-  </div>
-
-  <!-- MENU BAR -->
-  <div class="menu-bar">
-    <div class="menu-item">File</div>
-    <div class="menu-item">Edit</div>
-    <div class="menu-item">Sketch</div>
-    <div class="menu-item">Tools</div>
-    <div class="menu-item">Help</div>
-  </div>
-
-  <!-- TOP TOOLBAR -->
-  <div class="top-toolbar">
-    <div class="toolbar-left">
-      <div class="circle-btn">✓</div>
-      <div class="circle-btn">➜</div>
-      <div class="circle-btn">⟲</div>
-
-      <div class="board-select">
-        <span>Select Board</span>
-        <span>▼</span>
-      </div>
-    </div>
-
-    <div class="toolbar-right">
-      <span>∿</span>
-      <span>⚙</span>
-    </div>
-  </div>
-
-  <!-- MAIN AREA -->
   <div class="app">
-    <!-- LEFT SIDEBAR -->
-    <div class="sidebar">
-      <div class="side-icon active">📁</div>
-      <div class="side-icon">🖨</div>
-      <div class="side-icon">📚</div>
-      <div class="side-icon">⊘</div>
-      <div class="side-icon">⌕</div>
-
-      <div class="sidebar-bottom">
-        <div class="side-icon">👤</div>
+    <!-- TITLE BAR -->
+    <div class="title-bar">
+      <div class="title-left">
+        <div class="logo"></div>
+        <div>sketch_apr28a | Arduino IDE 2.3.7</div>
+      </div>
+      <div class="window-controls">
+        <div class="window-btn">─</div>
+        <div class="window-btn">▢</div>
+        <div class="window-btn close">✕</div>
       </div>
     </div>
 
-    <!-- EDITOR -->
-    <div class="editor-wrapper">
-      <div class="tab-bar">sketch_apr28a.ino</div>
+    <!-- MENU BAR -->
+    <div class="menu-bar">
+      <div class="menu-item">File</div>
+      <div class="menu-item">Edit</div>
+      <div class="menu-item">Sketch</div>
+      <div class="menu-item">Tools</div>
+      <div class="menu-item">Help</div>
+    </div>
 
-      <div class="editor">
-        <div class="line-numbers">
-1
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div class="circle-btn">✓</div>
+        <div class="circle-btn">→</div>
+        <div class="circle-btn">⇆</div>
+
+        <div class="board-select">
+          <span>Select Board</span>
+          <span>▼</span>
+        </div>
+      </div>
+
+      <div class="toolbar-right">
+        <span>∿</span>
+        <span>⚙</span>
+        <span style="font-size:18px;">⋯</span>
+      </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <div class="sidebar-top">
+          <div class="side-icon icon-folder"></div>
+          <div class="side-icon icon-board"></div>
+          <div class="side-icon icon-books"><span></span></div>
+          <div class="side-icon icon-debug"></div>
+          <div class="side-icon icon-search"></div>
+        </div>
+
+        <div class="sidebar-bottom">
+          <div class="side-icon icon-user"></div>
+        </div>
+      </div>
+
+      <!-- EDITOR -->
+      <div class="editor-wrap">
+        <div class="file-tab">
+          <span class="file-name">sketch_apr28a.ino</span>
+        </div>
+
+        <div class="editor">
+          <div class="line-numbers">1
 2
 3
 4
@@ -350,29 +498,27 @@
 7
 8
 9
-10
-        </div>
+10</div>
 
-        <div class="code-area"><div class="highlight-cursor"></div><span class="keyword">void</span> setup() {
+          <div class="code-area"><span class="kw">void</span> <span class="fn">setup</span>() {
   <span class="comment">// put your setup code here, to run once:</span>
 
 }
 
-<span class="keyword">void</span> loop() {
+<span class="kw">void</span> <span class="fn">loop</span>() {
   <span class="comment">// put your main code here, to run repeatedly:</span>
 
-}
+}</div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- STATUS BAR -->
-  <div class="status-bar">
-    <div class="status-item">Ln 1, Col 1</div>
-    <div class="status-item">✕ No board selected</div>
-    <div class="status-item">🔔</div>
+    <!-- STATUS BAR -->
+    <div class="status-bar">
+      <span>Ln 1, Col 1</span>
+      <span>✕ No board selected</span>
+      <span class="bell">🔔</span>
+    </div>
   </div>
-
 </body>
 </html>
