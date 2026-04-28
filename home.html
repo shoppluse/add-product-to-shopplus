@@ -3,401 +3,309 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sketch_apr28a | Arduino IDE 2.3.7</title>
+  <title>Arduino IDE Clone</title>
   <style>
-    :root{
-      --titlebar:#e8e3dc;
-      --menu-bg:#ffffff;
-      --toolbar:#006d70;
-      --sidebar:#dfe5e4;
-      --sidebar-border:#cfd6d5;
-      --editor-bg:#ffffff;
-      --code-bg:#f8f8f8;
-      --line-blue:#2e78b8;
-      --keyword:#0b9db0;
-      --comment:#95a2a6;
-      --orange:#d68033;
-      --status:#006d70;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
+    body {
+      background: #ffffff;
+      overflow: hidden;
     }
 
-    html,body{
-      width:100%;
-      height:100%;
-      overflow:hidden;
-      background:#fff;
-      font-family:"Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    /* WINDOW TITLE BAR */
+    .title-bar {
+      height: 32px;
+      background: #e9e5db;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      border-bottom: 1px solid #d3d0c7;
+      font-size: 14px;
+      color: #222;
     }
 
-    body{
-      display:flex;
-      flex-direction:column;
+    .title-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    /* ================= TITLE BAR ================= */
-    .titlebar{
-      height:26px;
-      background:var(--titlebar);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:0 8px 0 4px;
-      border-bottom:1px solid #d7d2cb;
-      flex-shrink:0;
+    .title-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      background: #4b9c9b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
     }
 
-    .titlebar-left{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      color:#222;
-      font-size:13px;
+    .window-controls {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 18px;
+      color: #222;
+      user-select: none;
     }
 
-    .app-icon{
-      width:16px;
-      height:16px;
-      border-radius:4px;
-      background:#2aa6a6;
-      position:relative;
-      flex-shrink:0;
+    /* MENU BAR */
+    .menu-bar {
+      height: 34px;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      padding: 0 8px;
+      font-size: 18px;
+      border-bottom: 1px solid #d9d9d9;
+      color: #333;
     }
 
-    .app-icon::before{
-      content:"∞";
-      position:absolute;
-      top:-2px;
-      left:2px;
-      color:#fff;
-      font-size:12px;
-      font-weight:700;
-      line-height:16px;
+    .menu-item {
+      cursor: default;
     }
 
-    .window-actions{
-      display:flex;
-      align-items:center;
-      gap:18px;
-      font-size:14px;
-      color:#333;
-      user-select:none;
+    /* TOP TOOLBAR */
+    .top-toolbar {
+      height: 54px;
+      background: #006d70;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
     }
 
-    /* ================= MENU BAR ================= */
-    .menubar{
-      height:28px;
-      background:var(--menu-bg);
-      border-bottom:1px solid #e2e2e2;
-      display:flex;
-      align-items:center;
-      gap:16px;
-      padding:0 6px;
-      flex-shrink:0;
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .menu-item{
-      font-size:13px;
-      color:#222;
-      cursor:pointer;
-      user-select:none;
+    .circle-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #79c7c6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0c5d5f;
+      font-size: 18px;
+      font-weight: bold;
     }
 
-    .menu-item:hover{
-      color:#006d70;
+    .board-select {
+      margin-left: 8px;
+      width: 255px;
+      height: 36px;
+      background: #ffffff;
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      color: #5f5f5f;
+      font-size: 16px;
     }
 
-    /* ================= TOP TOOLBAR ================= */
-    .toolbar{
-      height:46px;
-      background:var(--toolbar);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:0 12px;
-      flex-shrink:0;
+    .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      color: #d5f3f2;
+      font-size: 22px;
+      font-weight: 500;
     }
 
-    .toolbar-left{
-      display:flex;
-      align-items:center;
-      gap:8px;
+    /* MAIN APP AREA */
+    .app {
+      display: flex;
+      height: calc(100vh - 120px);
+      width: 100%;
     }
 
-    .circle-btn{
-      width:32px;
-      height:32px;
-      border-radius:50%;
-      background:#7bc9c8;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#0b5f61;
-      cursor:pointer;
-      user-select:none;
-      flex-shrink:0;
+    /* LEFT SIDEBAR */
+    .sidebar {
+      width: 52px;
+      background: #dfe6e5;
+      border-right: 1px solid #cfd5d4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 14px;
+      position: relative;
     }
 
-    .circle-btn svg{
-      width:18px;
-      height:18px;
-      stroke:#0b5f61;
-      fill:none;
-      stroke-width:2.1;
-      stroke-linecap:round;
-      stroke-linejoin:round;
+    .side-icon {
+      width: 100%;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #9aa4a3;
+      font-size: 28px;
+      cursor: default;
     }
 
-    .board-select{
-      width:255px;
-      height:32px;
-      background:#fff;
-      border-radius:2px;
-      margin-left:8px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:0 12px;
-      font-size:14px;
-      color:#616161;
-      user-select:none;
+    .side-icon.active {
+      color: #8a9695;
     }
 
-    .toolbar-right{
-      display:flex;
-      align-items:center;
-      gap:18px;
-      color:#e6f7f7;
-      user-select:none;
+    .sidebar-bottom {
+      position: absolute;
+      bottom: 12px;
+      width: 100%;
     }
 
-    .toolbar-right svg{
-      width:22px;
-      height:22px;
-      stroke:#e6f7f7;
-      fill:none;
-      stroke-width:2;
-      stroke-linecap:round;
-      stroke-linejoin:round;
+    /* EDITOR AREA */
+    .editor-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
     }
 
-    /* ================= APP BODY ================= */
-    .app{
-      flex:1;
-      display:flex;
-      min-height:0;
-      min-width:0;
+    .tab-bar {
+      height: 28px;
+      display: flex;
+      align-items: center;
+      padding-left: 8px;
+      font-size: 14px;
+      color: #444;
+      border-bottom: 1px solid #e2e2e2;
+      background: #ffffff;
     }
 
-    /* ================= LEFT SIDEBAR ================= */
-    .sidebar{
-      width:52px;
-      background:var(--sidebar);
-      border-right:1px solid var(--sidebar-border);
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      position:relative;
-      flex-shrink:0;
+    .editor {
+      flex: 1;
+      background: #ffffff;
+      display: flex;
+      position: relative;
+      overflow: hidden;
     }
 
-    .side-btn{
-      width:100%;
-      height:56px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      user-select:none;
+    .line-numbers {
+      width: 54px;
+      background: #ffffff;
+      color: #2e78b8;
+      padding-top: 12px;
+      text-align: right;
+      padding-right: 12px;
+      font-size: 16px;
+      line-height: 1.9;
+      user-select: none;
     }
 
-    .side-btn svg{
-      width:28px;
-      height:28px;
-      stroke:#a1aaaa;
-      fill:none;
-      stroke-width:1.8;
-      stroke-linecap:round;
-      stroke-linejoin:round;
+    .code-area {
+      flex: 1;
+      padding: 10px 0 0 10px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 16px;
+      line-height: 1.9;
+      color: #3d3d3d;
+      white-space: pre;
+      position: relative;
     }
 
-    .side-btn:hover svg{
-      stroke:#7f8a8a;
+    .keyword {
+      color: #0b8fb0;
+      font-weight: 500;
     }
 
-    .bottom-user{
-      position:absolute;
-      bottom:10px;
-      width:100%;
+    .comment {
+      color: #97a3a5;
     }
 
-    /* ================= RIGHT EDITOR AREA ================= */
-    .editor-shell{
-      flex:1;
-      display:flex;
-      flex-direction:column;
-      min-width:0;
-      min-height:0;
-      background:#fff;
+    .highlight-cursor {
+      position: absolute;
+      top: 14px;
+      left: 2px;
+      width: 2px;
+      height: 22px;
+      background: #1fa2a6;
     }
 
-    .tabbar{
-      height:34px;
-      border-bottom:1px solid #e6e6e6;
-      background:#fff;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:0 8px;
-      flex-shrink:0;
+    /* BOTTOM STATUS BAR */
+    .status-bar {
+      height: 28px;
+      background: #006d70;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 18px;
+      padding: 0 14px;
+      color: #ffffff;
+      font-size: 14px;
     }
 
-    .tab-title{
-      font-size:14px;
-      color:#444;
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .tab-more{
-      color:#666;
-      font-size:22px;
-      line-height:1;
-      user-select:none;
-    }
+    /* simple responsive */
+    @media (max-width: 900px) {
+      .board-select {
+        width: 180px;
+      }
 
-    .editor{
-      flex:1;
-      display:flex;
-      min-height:0;
-      min-width:0;
-      background:#fff;
-    }
+      .menu-bar {
+        gap: 12px;
+        font-size: 14px;
+      }
 
-    .line-numbers{
-      width:74px;
-      flex-shrink:0;
-      background:#fff;
-      color:var(--line-blue);
-      text-align:right;
-      padding-right:18px;
-      padding-top:8px;
-      font-size:14px;
-      line-height:1.5;
-      user-select:none;
-      white-space:pre;
-    }
+      .line-numbers {
+        width: 42px;
+        font-size: 14px;
+      }
 
-    .code-panel{
-      flex:1;
-      min-width:0;
-      background:var(--code-bg);
-      border-left:1px solid #efefef;
-      position:relative;
-      padding-top:8px;
-      font-family:Consolas, "Courier New", monospace;
-      font-size:14px;
-      line-height:1.5;
-      color:#333;
-      overflow:auto;
-      white-space:pre;
-    }
-
-    .cursor{
-      position:absolute;
-      top:8px;
-      left:0;
-      width:2px;
-      height:20px;
-      background:#18a4a7;
-    }
-
-    .code{
-      min-width:max-content;
-      padding-left:0;
-    }
-
-    .kw{ color:var(--keyword); }
-    .comment{ color:var(--comment); }
-    .orange{ color:var(--orange); }
-
-    /* ================= STATUS BAR ================= */
-    .statusbar{
-      height:28px;
-      background:var(--status);
-      display:flex;
-      align-items:center;
-      justify-content:flex-end;
-      gap:18px;
-      padding:0 12px;
-      color:#fff;
-      font-size:12px;
-      flex-shrink:0;
-      user-select:none;
-    }
-
-    /* prevent accidental blue selection */
-    .no-select{
-      -webkit-user-select:none;
-      -ms-user-select:none;
-      user-select:none;
+      .code-area {
+        font-size: 14px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- TITLE BAR -->
-  <div class="titlebar">
-    <div class="titlebar-left">
-      <div class="app-icon"></div>
+  <!-- WINDOW TITLE BAR -->
+  <div class="title-bar">
+    <div class="title-left">
+      <div class="title-icon">∞</div>
       <div>sketch_apr28a | Arduino IDE 2.3.7</div>
     </div>
-    <div class="window-actions">
-      <span>—</span>
+    <div class="window-controls">
+      <span>−</span>
       <span>□</span>
       <span>✕</span>
     </div>
   </div>
 
   <!-- MENU BAR -->
-  <div class="menubar">
-    <div class="menu-item" onclick="location.href='file.html'">File</div>
+  <div class="menu-bar">
+    <div class="menu-item">File</div>
     <div class="menu-item">Edit</div>
     <div class="menu-item">Sketch</div>
     <div class="menu-item">Tools</div>
     <div class="menu-item">Help</div>
   </div>
 
-  <!-- TOOLBAR -->
-  <div class="toolbar">
+  <!-- TOP TOOLBAR -->
+  <div class="top-toolbar">
     <div class="toolbar-left">
-      <!-- Verify -->
-      <div class="circle-btn" title="Verify">
-        <svg viewBox="0 0 24 24">
-          <path d="M5 12l4 4 10-10"></path>
-        </svg>
-      </div>
-
-      <!-- Upload -->
-      <div class="circle-btn" title="Upload">
-        <svg viewBox="0 0 24 24">
-          <path d="M5 12h12"></path>
-          <path d="M13 6l6 6-6 6"></path>
-        </svg>
-      </div>
-
-      <!-- Debug / Board action -->
-      <div class="circle-btn" title="Debug">
-        <svg viewBox="0 0 24 24">
-          <circle cx="8" cy="8" r="1.5"></circle>
-          <circle cx="16" cy="16" r="1.5"></circle>
-          <path d="M9.5 9.5l5 5"></path>
-          <path d="M15 8h4v4"></path>
-          <path d="M15 8l4 4"></path>
-        </svg>
-      </div>
+      <div class="circle-btn">✓</div>
+      <div class="circle-btn">➜</div>
+      <div class="circle-btn">⟲</div>
 
       <div class="board-select">
         <span>Select Board</span>
@@ -406,90 +314,33 @@
     </div>
 
     <div class="toolbar-right">
-      <!-- Wave -->
-      <svg viewBox="0 0 24 24">
-        <path d="M2 12c2 0 2-8 4-8s2 16 4 16 2-12 4-12 2 8 4 8"></path>
-      </svg>
-
-      <!-- Magnifier + Gear-ish simplified -->
-      <svg viewBox="0 0 24 24">
-        <circle cx="10" cy="10" r="5"></circle>
-        <path d="M14 14l5 5"></path>
-        <path d="M19 4v3"></path>
-        <path d="M17.5 5.5h3"></path>
-      </svg>
-
-      <span style="font-size:22px; line-height:1;">···</span>
+      <span>∿</span>
+      <span>⚙</span>
     </div>
   </div>
 
-  <!-- MAIN APP -->
+  <!-- MAIN AREA -->
   <div class="app">
-    <!-- SIDEBAR -->
+    <!-- LEFT SIDEBAR -->
     <div class="sidebar">
-      <!-- Folder -->
-      <div class="side-btn" onclick="location.href='file.html'" title="Open File">
-        <svg viewBox="0 0 24 24">
-          <path d="M3 6h6l2 2h10v10H3z"></path>
-        </svg>
-      </div>
+      <div class="side-icon active">📁</div>
+      <div class="side-icon">🖨</div>
+      <div class="side-icon">📚</div>
+      <div class="side-icon">⊘</div>
+      <div class="side-icon">⌕</div>
 
-      <!-- Serial monitor / output -->
-      <div class="side-btn" title="Output">
-        <svg viewBox="0 0 24 24">
-          <rect x="5" y="5" width="14" height="14"></rect>
-          <path d="M9 10h6"></path>
-          <path d="M9 14h6"></path>
-        </svg>
-      </div>
-
-      <!-- Library -->
-      <div class="side-btn" title="Library">
-        <svg viewBox="0 0 24 24">
-          <path d="M5 4h3v16H5z"></path>
-          <path d="M10.5 8h3v12h-3z"></path>
-          <path d="M16 2h3v18h-3z"></path>
-        </svg>
-      </div>
-
-      <!-- Debug -->
-      <div class="side-btn" title="Debug">
-        <svg viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="8"></circle>
-          <path d="M8 16l8-8"></path>
-        </svg>
-      </div>
-
-      <!-- Search -->
-      <div class="side-btn" title="Search">
-        <svg viewBox="0 0 24 24">
-          <circle cx="10" cy="10" r="6"></circle>
-          <path d="M15 15l5 5"></path>
-        </svg>
-      </div>
-
-      <!-- Bottom user -->
-      <div class="bottom-user">
-        <div class="side-btn" title="Profile">
-          <svg viewBox="0 0 24 24">
-            <circle cx="12" cy="8" r="4"></circle>
-            <path d="M4 20c2-4 14-4 16 0"></path>
-          </svg>
-        </div>
+      <div class="sidebar-bottom">
+        <div class="side-icon">👤</div>
       </div>
     </div>
 
-    <!-- EDITOR SHELL -->
-    <div class="editor-shell">
-      <!-- TAB BAR -->
-      <div class="tabbar">
-        <div class="tab-title">sketch_apr28a.ino</div>
-        <div class="tab-more">···</div>
-      </div>
+    <!-- EDITOR -->
+    <div class="editor-wrapper">
+      <div class="tab-bar">sketch_apr28a.ino</div>
 
-      <!-- EDITOR -->
       <div class="editor">
-        <div class="line-numbers">1
+        <div class="line-numbers">
+1
 2
 3
 4
@@ -498,29 +349,28 @@
 7
 8
 9
-10</div>
+10
+        </div>
 
-        <div class="code-panel">
-          <div class="cursor"></div>
-          <div class="code"><span class="kw">void</span> setup() {
+        <div class="code-area"><div class="highlight-cursor"></div><span class="keyword">void</span> setup() {
   <span class="comment">// put your setup code here, to run once:</span>
 
 }
 
-<span class="kw">void</span> <span class="orange">loop</span>() {
+<span class="keyword">void</span> loop() {
   <span class="comment">// put your main code here, to run repeatedly:</span>
 
-}</div>
+}
         </div>
       </div>
     </div>
   </div>
 
   <!-- STATUS BAR -->
-  <div class="statusbar">
-    <span>Ln 1, Col 1</span>
-    <span>✕ No board selected</span>
-    <span>🔔</span>
+  <div class="status-bar">
+    <div class="status-item">Ln 1, Col 1</div>
+    <div class="status-item">✕ No board selected</div>
+    <div class="status-item">🔔</div>
   </div>
 
 </body>
