@@ -1,775 +1,1063 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sketch_apr28a | Arduino IDE 2.3.7</title>
+  <title>ShopPlus Ultimate Product JSON Generator</title>
   <style>
-    :root{
-      --titlebar:#f3efe9;
-      --menubar:#ffffff;
-      --toolbar:#0a7b7b;
-      --toolbar-dark:#076b6b;
-      --sidebar:#edf2f2;
-      --sidebar-border:#d6dddd;
-      --tabbar:#eef2f2;
-      --editor-bg:#ffffff;
-      --editor-line:#1b82aa;
-      --editor-text:#455a64;
-      --editor-comment:#8aa0a0;
-      --editor-key:#0a8db7;
-      --editor-fn:#6a4fa3;
-      --status:#0a7b7b;
-      --border:#dde4e4;
-      --text:#2d2d2d;
-      --icon:#9aabb0;
-      --icon-hover:#74868d;
-      --win-hover:#e6e1db;
-      --win-close:#e81123;
+    :root {
+      --bg1: #eef5ff;
+      --bg2: #dce9ff;
+      --card: rgba(255,255,255,0.96);
+      --card-2: #f6f9ff;
+      --text: #1f2d3d;
+      --muted: #51657d;
+      --primary: #0047ab;
+      --primary-2: #0d5bd7;
+      --border: #d7e4ff;
+      --shadow: 0 12px 30px rgba(0, 71, 171, 0.12);
+      --code-bg: #0f172a;
+      --code-text: #d6e4ff;
+      --ok: #0f9d58;
+      --warn: #b45309;
+      --danger: #b91c1c;
     }
 
-    *{
-      box-sizing:border-box;
-      margin:0;
-      padding:0;
+    html[data-theme="dark"] {
+      --bg1: #0b1220;
+      --bg2: #111a2e;
+      --card: rgba(17, 26, 46, 0.96);
+      --card-2: #16223d;
+      --text: #e6edf8;
+      --muted: #9cb0ce;
+      --primary: #5aa0ff;
+      --primary-2: #7cb4ff;
+      --border: #243759;
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+      --code-bg: #07101f;
+      --code-text: #d6e4ff;
+      --ok: #22c55e;
+      --warn: #f59e0b;
+      --danger: #ef4444;
     }
 
-    html,body{
-      width:100%;
-      height:100%;
-      overflow:hidden;
-      background:#cfcfcf;
-      font-family:"Segoe UI", Tahoma, Arial, sans-serif;
-      user-select:none;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      min-height: 100vh;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
     }
 
-    /* APP WINDOW */
-    .window{
-      width:100vw;
-      height:100vh;
-      display:flex;
-      flex-direction:column;
-      background:#fff;
-      overflow:hidden;
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: linear-gradient(90deg, var(--primary), var(--primary-2));
+      color: #fff;
+      padding: 14px 16px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
     }
 
-    /* ================= TITLE BAR ================= */
-    .titlebar{
-      height:32px;
-      background:var(--titlebar);
-      border-bottom:1px solid #ddd7d1;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding-left:8px;
-      flex-shrink:0;
+    .header-inner {
+      max-width: 1500px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
-    .title-left{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      min-width:0;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
-    .arduino-app-icon{
-      width:18px;
-      height:18px;
-      border-radius:4px;
-      background:#0b8a8a;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      flex-shrink:0;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+    .logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.18);
+      display: grid;
+      place-items: center;
+      font-size: 1.4rem;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18);
     }
 
-    .arduino-app-icon svg{
-      width:12px;
-      height:12px;
-      display:block;
+    .brand-text h1 {
+      font-size: 1.2rem;
+      line-height: 1.1;
+      font-weight: 800;
+      letter-spacing: 0.2px;
     }
 
-    .window-title{
-      font-size:13px;
-      color:#232323;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
+    .brand-text p {
+      font-size: 0.84rem;
+      opacity: 0.92;
+      margin-top: 2px;
     }
 
-    .window-controls{
-      height:100%;
-      display:flex;
-      align-items:stretch;
-      flex-shrink:0;
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
-    .win-btn{
-      width:46px;
-      height:100%;
-      border:none;
-      background:transparent;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      color:#333;
-      transition:background .12s ease;
+    .theme-toggle {
+      border: none;
+      background: rgba(255,255,255,0.16);
+      color: #fff;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
     }
 
-    .win-btn:hover{ background:var(--win-hover); }
-    .win-btn.close:hover{ background:var(--win-close); color:#fff; }
-
-    .win-btn svg{
-      width:10px;
-      height:10px;
-      display:block;
+    .container {
+      max-width: 1500px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 14px;
+      flex: 1;
     }
 
-    /* ================= MENU BAR ================= */
-    .menubar{
-      height:22px;
-      background:var(--menubar);
-      display:flex;
-      align-items:center;
-      gap:18px;
-      padding:0 6px;
-      border-bottom:1px solid #e8ecec;
-      flex-shrink:0;
-      position:relative;
-      z-index:20;
+    .left-stack {
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 14px;
+      min-height: calc(100vh - 90px);
     }
 
-    .menu-item{
-      font-size:13px;
-      color:#222;
-      line-height:1;
-      padding:2px 2px;
-      cursor:pointer;
-      border-radius:2px;
+    .right-stack {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 14px;
+      min-height: calc(100vh - 90px);
     }
 
-    .menu-item:hover{
-      background:#f1f3f3;
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
     }
 
-    .menu-item.active{
-      background:#e8ecec;
+    .panel-title {
+      background: var(--card-2);
+      color: var(--primary);
+      padding: 12px 16px;
+      font-weight: 800;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
-    /* FILE DROPDOWN */
-    .file-dropdown{
-      position:absolute;
-      top:22px;
-      left:4px;
-      width:200px;
-      background:#ffffff;
-      border:1px solid #cfd7d7;
-      box-shadow:0 4px 16px rgba(0,0,0,0.12);
-      display:none;
-      flex-direction:column;
-      padding:4px 0;
-      z-index:50;
+    .panel-body {
+      padding: 14px;
+      overflow: auto;
+      min-height: 0;
     }
 
-    .file-dropdown.show{
-      display:flex;
+    .subhint {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 700;
     }
 
-    .file-dropdown a{
-      text-decoration:none;
-      color:#222;
-      font-size:13px;
-      padding:8px 14px;
-      display:block;
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
     }
 
-    .file-dropdown a:hover{
-      background:#edf3f3;
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
-    /* ================= TOOLBAR ================= */
-    .toolbar{
-      height:46px;
-      background:var(--toolbar);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:0 12px;
-      flex-shrink:0;
-      box-shadow:inset 0 -1px 0 rgba(0,0,0,0.08);
+    .field.full {
+      grid-column: 1 / -1;
     }
 
-    .toolbar-left{
-      display:flex;
-      align-items:center;
-      gap:8px;
+    label {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--primary);
     }
 
-    .toolbar-btn{
-      width:30px;
-      height:30px;
-      border-radius:50%;
-      border:none;
-      background:rgba(255,255,255,0.16);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      transition:background .15s ease;
-      padding:0;
+    input, textarea, select {
+      width: 100%;
+      border: 1.6px solid var(--border);
+      border-radius: 14px;
+      padding: 11px 12px;
+      font-size: 0.95rem;
+      outline: none;
+      background: rgba(255,255,255,0.92);
+      color: #1f2d3d;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.1s;
     }
 
-    .toolbar-btn:hover{
-      background:rgba(255,255,255,0.25);
+    html[data-theme="dark"] input,
+    html[data-theme="dark"] textarea,
+    html[data-theme="dark"] select {
+      background: rgba(10, 18, 32, 0.72);
+      color: #e6edf8;
     }
 
-    .toolbar-btn svg{
-      width:17px;
-      height:17px;
-      stroke:#d9f0f0;
-      fill:none;
-      stroke-width:2;
-      stroke-linecap:round;
-      stroke-linejoin:round;
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 71, 171, 0.12);
     }
 
-    .board-select{
-      margin-left:8px;
-      width:255px;
-      height:32px;
-      background:#f6f9f9;
-      border:1px solid #d2dcdc;
-      border-radius:2px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:0 12px;
-      color:#475d5d;
-      font-size:14px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+    textarea {
+      min-height: 92px;
+      resize: vertical;
     }
 
-    .board-select .arrow{
-      display:flex;
-      align-items:center;
-      justify-content:center;
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
     }
 
-    .board-select .arrow svg{
-      width:11px;
-      height:11px;
-      stroke:#5d7070;
-      fill:none;
-      stroke-width:2;
-      stroke-linecap:round;
-      stroke-linejoin:round;
+    button {
+      border: none;
+      border-radius: 14px;
+      padding: 11px 16px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.2s;
     }
 
-    .toolbar-right{
-      display:flex;
-      align-items:center;
-      gap:12px;
+    button:hover { transform: translateY(-1px); }
+
+    .primary {
+      background: linear-gradient(90deg, var(--primary), var(--primary-2));
+      color: #fff;
     }
 
-    .toolbar-icon-btn{
-      width:26px;
-      height:26px;
-      border:none;
-      background:transparent;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      padding:0;
+    .secondary {
+      background: var(--card-2);
+      color: var(--primary);
+      border: 1px solid var(--border);
     }
 
-    .toolbar-icon-btn svg{
-      width:18px;
-      height:18px;
-      stroke:#d8efef;
-      fill:none;
-      stroke-width:2;
-      stroke-linecap:round;
-      stroke-linejoin:round;
+    .danger {
+      background: rgba(185, 28, 28, 0.1);
+      color: var(--danger);
+      border: 1px solid rgba(185, 28, 28, 0.2);
     }
 
-    /* ================= MAIN AREA ================= */
-    .main{
-      flex:1;
-      display:flex;
-      min-height:0;
-      background:#fff;
+    .success {
+      background: rgba(15, 157, 88, 0.1);
+      color: var(--ok);
+      border: 1px solid rgba(15, 157, 88, 0.2);
     }
 
-    /* ================= SIDEBAR ================= */
-    .sidebar{
-      width:52px;
-      background:var(--sidebar);
-      border-right:1px solid var(--sidebar-border);
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      align-items:center;
-      padding:12px 0 10px;
-      flex-shrink:0;
+    .warn {
+      background: rgba(180, 83, 9, 0.1);
+      color: var(--warn);
+      border: 1px solid rgba(180, 83, 9, 0.2);
     }
 
-    .sidebar-top,
-    .sidebar-bottom{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:16px;
-      width:100%;
+    .status {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--muted);
+      margin-top: 10px;
+      min-height: 22px;
     }
 
-    .side-btn{
-      width:100%;
-      height:36px;
-      border:none;
-      background:transparent;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      position:relative;
-      padding:0;
+    .quick-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
     }
 
-    .side-btn:hover{
-      background:rgba(0,0,0,0.03);
+    .stat {
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
     }
 
-    .side-btn.active::before{
-      content:"";
-      position:absolute;
-      left:0;
-      top:5px;
-      bottom:5px;
-      width:3px;
-      background:#0a7b7b;
-      border-radius:0 2px 2px 0;
+    .stat .k {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-weight: 800;
+      margin-bottom: 4px;
     }
 
-    .side-btn svg{
-      width:24px;
-      height:24px;
-      stroke:var(--icon);
-      fill:none;
-      stroke-width:1.8;
-      stroke-linecap:round;
-      stroke-linejoin:round;
-      transition:stroke .15s ease;
+    .stat .v {
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: var(--primary);
     }
 
-    .side-btn:hover svg{
-      stroke:var(--icon-hover);
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
     }
 
-    /* ================= RIGHT PANEL ================= */
-    .workspace{
-      flex:1;
-      min-width:0;
-      display:flex;
-      flex-direction:column;
-      background:#fff;
+    .preview-card {
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
     }
 
-    .tabbar{
-      height:34px;
-      background:var(--tabbar);
-      border-bottom:1px solid var(--border);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:0 8px 0 8px;
-      flex-shrink:0;
+    .preview-card .img-wrap {
+      flex: 1;
+      min-height: 110px;
+      background: rgba(0, 71, 171, 0.05);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
     }
 
-    .tab-left{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      min-width:0;
+    .preview-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
     }
 
-    .tab-file{
-      font-size:14px;
-      color:#445454;
-      white-space:nowrap;
+    .preview-card .placeholder {
+      padding: 14px;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 800;
     }
 
-    .tab-right{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      width:20px;
-      height:20px;
-      color:#667;
-      cursor:pointer;
+    .preview-card .cap {
+      padding: 8px 10px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--primary);
+      border-top: 1px solid var(--border);
+      background: rgba(255,255,255,0.4);
     }
 
-    .tab-right svg{
-      width:14px;
-      height:14px;
-      stroke:#667;
-      fill:none;
-      stroke-width:2;
-      stroke-linecap:round;
-      stroke-linejoin:round;
+    .code-toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
     }
 
-    /* ================= EDITOR ================= */
-    .editor{
-      flex:1;
-      min-height:0;
-      display:flex;
-      background:var(--editor-bg);
-      overflow:hidden;
-      font-family: Consolas, "Courier New", monospace;
+    .toolbar-left, .toolbar-right {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
     }
 
-    .line-numbers{
-      width:60px;
-      flex-shrink:0;
-      padding-top:8px;
-      padding-right:16px;
-      text-align:right;
-      font-size:14px;
-      line-height:31px;
-      color:var(--editor-line);
-      background:#fff;
-      user-select:none;
+    .pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      color: var(--primary);
+      font-size: 0.82rem;
+      font-weight: 800;
     }
 
-    .code-pane{
-      flex:1;
-      min-width:0;
-      padding-top:8px;
-      padding-left:14px;
-      font-size:14px;
-      line-height:31px;
-      color:var(--editor-text);
-      white-space:pre;
-      overflow:hidden;
+    pre {
+      flex: 1;
+      background: var(--code-bg);
+      color: var(--code-text);
+      border-radius: 18px;
+      padding: 16px;
+      overflow: auto;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      word-break: break-word;
+      border: 1px solid rgba(255,255,255,0.06);
+      min-height: 280px;
     }
 
-    .kw{ color:var(--editor-key); }
-    .fn{ color:var(--editor-fn); }
-    .comment{ color:var(--editor-comment); }
-
-    /* right gutter to mimic IDE */
-    .editor::after{
-      content:"";
-      width:8px;
-      border-left:1px solid #f0f2f2;
-      background:#fff;
-      flex-shrink:0;
+    .footer-note {
+      margin-top: 10px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 700;
     }
 
-    /* ================= STATUS BAR ================= */
-    .statusbar{
-      height:24px;
-      background:var(--status);
-      display:flex;
-      align-items:center;
-      justify-content:flex-end;
-      gap:14px;
-      padding:0 10px;
-      color:#ffffff;
-      font-size:12px;
-      flex-shrink:0;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,0.05);
+    .small {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 700;
     }
 
-    .status-item{
-      display:flex;
-      align-items:center;
-      gap:6px;
-      white-space:nowrap;
+    @media (max-width: 1100px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+      .left-stack, .right-stack {
+        min-height: auto;
+      }
     }
 
-    .status-icon{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    .status-icon svg{
-      width:13px;
-      height:13px;
-      stroke:#ffffff;
-      fill:none;
-      stroke-width:2;
-      stroke-linecap:round;
-      stroke-linejoin:round;
+    @media (max-width: 768px) {
+      .grid, .quick-stats, .preview-grid {
+        grid-template-columns: 1fr;
+      }
+      .field.full {
+        grid-column: auto;
+      }
+      .header-inner {
+        align-items: flex-start;
+      }
+      .brand-text h1 {
+        font-size: 1.05rem;
+      }
+      .container {
+        padding: 10px;
+        gap: 10px;
+      }
+      .panel-body {
+        padding: 12px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="window">
-    <!-- TITLE BAR -->
-    <div class="titlebar">
-      <div class="title-left">
-        <div class="arduino-app-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24">
-            <path d="M5 12c0-2 1.5-3.5 3.5-3.5S12 10 12 12s-1.5 3.5-3.5 3.5S5 14 5 12Z" fill="none" stroke="#fff" stroke-width="1.8"/>
-            <path d="M12 12c0-2 1.5-3.5 3.5-3.5S19 10 19 12s-1.5 3.5-3.5 3.5S12 14 12 12Z" fill="none" stroke="#fff" stroke-width="1.8"/>
-            <path d="M7.4 12h2.3M15.1 10.8v2.4M13.9 12h2.4" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
-          </svg>
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="logo">🛍️</div>
+        <div class="brand-text">
+          <h1>ShopPlus Ultimate Product JSON Generator</h1>
+          <p>Fill once • Generate instantly • Copy directly into products.json</p>
         </div>
-        <div class="window-title">sketch_apr28a | Arduino IDE 2.3.7</div>
       </div>
 
-      <div class="window-controls">
-        <button class="win-btn" type="button" aria-label="Minimize">
-          <svg viewBox="0 0 10 10"><path d="M1 5h8" stroke="currentColor" stroke-width="1.2"/></svg>
-        </button>
-        <button class="win-btn" type="button" aria-label="Maximize">
-          <svg viewBox="0 0 10 10"><rect x="1.5" y="1.5" width="7" height="7" stroke="currentColor" fill="none" stroke-width="1.1"/></svg>
-        </button>
-        <button class="win-btn close" type="button" aria-label="Close">
-          <svg viewBox="0 0 10 10"><path d="M2 2l6 6M8 2L2 8" stroke="currentColor" stroke-width="1.2"/></svg>
-        </button>
+      <div class="top-actions">
+        <button class="theme-toggle" id="themeToggle">🌙 Dark Mode</button>
       </div>
     </div>
+  </header>
 
-    <!-- MENU BAR -->
-    <div class="menubar">
-      <div class="menu-item" id="fileMenuBtn">File</div>
-      <div class="menu-item">Edit</div>
-      <div class="menu-item">Sketch</div>
-      <div class="menu-item">Tools</div>
-      <div class="menu-item">Help</div>
-
-      <!-- File dropdown -->
-      <div class="file-dropdown" id="fileDropdown">
-        <a href="file.html">Open Sketchbook</a>
-        <a href="file.html">Open Recent</a>
-        <a href="file.html">Open File Manager</a>
-      </div>
-    </div>
-
-    <!-- TOOLBAR -->
-    <div class="toolbar">
-      <div class="toolbar-left">
-        <!-- Verify -->
-        <button class="toolbar-btn" type="button" aria-label="Verify">
-          <svg viewBox="0 0 24 24">
-            <path d="M5 12l4 4 10-10"></path>
-          </svg>
-        </button>
-
-        <!-- Upload -->
-        <button class="toolbar-btn" type="button" aria-label="Upload">
-          <svg viewBox="0 0 24 24">
-            <path d="M12 16V6"></path>
-            <path d="M8 10l4-4 4 4"></path>
-            <path d="M5 18h14"></path>
-          </svg>
-        </button>
-
-        <!-- Debug/Serial -->
-        <button class="toolbar-btn" type="button" aria-label="Debug">
-          <svg viewBox="0 0 24 24">
-            <path d="M8 7l8 5-8 5V7z"></path>
-            <path d="M5 5l2 2M17 17l2 2M19 5l-2 2M5 19l2-2"></path>
-          </svg>
-        </button>
-
-        <div class="board-select" role="button" tabindex="0" aria-label="Select Board">
-          <span>Select Board</span>
-          <span class="arrow">
-            <svg viewBox="0 0 24 24">
-              <path d="M6 9l6 6 6-6"></path>
-            </svg>
-          </span>
+  <main class="container">
+    <!-- LEFT -->
+    <section class="left-stack">
+      <!-- Existing products parser -->
+      <div class="panel">
+        <div class="panel-title">
+          <span>1) Existing products.json Array (Optional but Powerful)</span>
+          <span class="subhint">Paste your current full products array here to auto-detect next ID</span>
         </div>
-      </div>
-
-      <div class="toolbar-right">
-        <!-- waveform -->
-        <button class="toolbar-icon-btn" type="button" aria-label="Monitor">
-          <svg viewBox="0 0 24 24">
-            <path d="M3 13h4l2-7 4 12 2-7h6"></path>
-          </svg>
-        </button>
-
-        <!-- settings -->
-        <button class="toolbar-icon-btn" type="button" aria-label="Settings">
-          <svg viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="3"></circle>
-            <path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1L7 17M17 7l2.1-2.1"></path>
-          </svg>
-        </button>
-
-        <!-- more -->
-        <button class="toolbar-icon-btn" type="button" aria-label="More">
-          <svg viewBox="0 0 24 24">
-            <circle cx="5" cy="12" r="1.2" fill="#d8efef" stroke="none"></circle>
-            <circle cx="12" cy="12" r="1.2" fill="#d8efef" stroke="none"></circle>
-            <circle cx="19" cy="12" r="1.2" fill="#d8efef" stroke="none"></circle>
-          </svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- MAIN -->
-    <div class="main">
-      <!-- SIDEBAR -->
-      <aside class="sidebar">
-        <div class="sidebar-top">
-          <!-- File/Folder -->
-          <button class="side-btn active" id="folderBtn" type="button" aria-label="Files">
-            <svg viewBox="0 0 24 24">
-              <path d="M3 7h6l2 2h10v8a2 2 0 0 1-2 2H3z"></path>
-              <path d="M3 7v10"></path>
-            </svg>
-          </button>
-
-          <!-- Board -->
-          <button class="side-btn" type="button" aria-label="Boards">
-            <svg viewBox="0 0 24 24">
-              <rect x="5" y="7" width="14" height="10" rx="1"></rect>
-              <path d="M9 4v3M15 4v3M9 17v3M15 17v3M3 10h2M3 14h2M19 10h2M19 14h2"></path>
-            </svg>
-          </button>
-
-          <!-- Library -->
-          <button class="side-btn" type="button" aria-label="Library">
-            <svg viewBox="0 0 24 24">
-              <path d="M5 4h4v16H5z"></path>
-              <path d="M10 6h4v14h-4z"></path>
-              <path d="M15 8h4v12h-4z"></path>
-            </svg>
-          </button>
-
-          <!-- Debug -->
-          <button class="side-btn" type="button" aria-label="Debug">
-            <svg viewBox="0 0 24 24">
-              <circle cx="11" cy="11" r="7"></circle>
-              <path d="M20 20l-4-4"></path>
-              <path d="M8 14l6-6"></path>
-            </svg>
-          </button>
-
-          <!-- Search -->
-          <button class="side-btn" type="button" aria-label="Search">
-            <svg viewBox="0 0 24 24">
-              <circle cx="10" cy="10" r="7"></circle>
-              <path d="M15.5 15.5L21 21"></path>
-            </svg>
-          </button>
-        </div>
-
-        <div class="sidebar-bottom">
-          <!-- Account -->
-          <button class="side-btn" type="button" aria-label="Account">
-            <svg viewBox="0 0 24 24">
-              <circle cx="12" cy="8" r="4"></circle>
-              <path d="M4 20c1.5-4 14.5-4 16 0"></path>
-            </svg>
-          </button>
-        </div>
-      </aside>
-
-      <!-- WORKSPACE -->
-      <section class="workspace">
-        <!-- TAB BAR -->
-        <div class="tabbar">
-          <div class="tab-left">
-            <div class="tab-file">sketch_apr28a.ino</div>
+        <div class="panel-body">
+          <div class="field full">
+            <label for="existingJson">Paste full existing products array here</label>
+            <textarea id="existingJson" placeholder='Example: [ { "id": 1, ... }, { "id": 2, ... } ]'></textarea>
           </div>
-          <div class="tab-right" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <path d="M7 10l5 5 5-5"></path>
-            </svg>
+
+          <div class="actions">
+            <button class="secondary" id="analyzeBtn">Analyze Existing Array</button>
+            <button class="secondary" id="clearExistingBtn">Clear Existing Array</button>
+          </div>
+
+          <div class="status" id="analyzeStatus">Paste your existing products array to auto-calculate next ID and full array output.</div>
+
+          <div class="quick-stats" style="margin-top: 12px;">
+            <div class="stat">
+              <div class="k">Detected Products</div>
+              <div class="v" id="statCount">0</div>
+            </div>
+            <div class="stat">
+              <div class="k">Highest ID</div>
+              <div class="v" id="statHighestId">0</div>
+            </div>
+            <div class="stat">
+              <div class="k">Next Suggested ID</div>
+              <div class="v" id="statNextId">1</div>
+            </div>
+            <div class="stat">
+              <div class="k">Output Mode</div>
+              <div class="v" id="statMode">Item</div>
+            </div>
           </div>
         </div>
+      </div>
 
-        <!-- EDITOR -->
-        <div class="editor">
-          <div class="line-numbers">1
-2
-3
-4
-5
-6
-7
-8
-9
-10</div>
-
-          <div class="code-pane"><span class="kw">void</span> <span class="fn">setup</span>() {
-  <span class="comment">// put your setup code here, to run once:</span>
-
-}
-
-<span class="kw">void</span> <span class="fn">loop</span>() {
-  <span class="comment">// put your main code here, to run repeatedly:</span>
-
-}</div>
+      <!-- Product form -->
+      <div class="panel">
+        <div class="panel-title">
+          <span>2) Fill Product Details</span>
+          <span class="subhint">Top half form • Bottom half ready code</span>
         </div>
-      </section>
-    </div>
+        <div class="panel-body">
+          <div class="grid">
+            <div class="field">
+              <label for="id">ID</label>
+              <input type="number" id="id" placeholder="Auto or manual" />
+              <div class="small">Leave blank to auto-use next suggested ID</div>
+            </div>
 
-    <!-- STATUS BAR -->
-    <div class="statusbar">
-      <div class="status-item">Ln 1, Col 1</div>
-      <div class="status-item">
-        <span class="status-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24">
-            <path d="M8 8l8 8"></path>
-            <path d="M16 8l-8 8"></path>
-          </svg>
-        </span>
-        <span>No board selected</span>
+            <div class="field">
+              <label for="mode">Output Mode</label>
+              <select id="mode">
+                <option value="item">Single Item (with comma)</option>
+                <option value="object">Single Object (no comma)</option>
+                <option value="fullArray">Full Array (existing + new)</option>
+              </select>
+            </div>
+
+            <div class="field full">
+              <label for="name">Product Name</label>
+              <input type="text" id="name" placeholder="Enter product name" />
+            </div>
+
+            <div class="field full">
+              <label for="description">Description</label>
+              <textarea id="description" placeholder="Enter product description"></textarea>
+            </div>
+
+            <div class="field">
+              <label for="price">Price (number only)</label>
+              <input type="text" id="price" placeholder="e.g. 499" />
+            </div>
+
+            <div class="field">
+              <label for="rating">Rating</label>
+              <input type="number" id="rating" step="0.1" min="0" max="5" placeholder="e.g. 4.5" />
+            </div>
+
+            <div class="field full">
+              <label for="link">Affiliate Link</label>
+              <input type="url" id="link" placeholder="https://..." />
+            </div>
+
+            <div class="field full">
+              <label for="image">Main Image URL</label>
+              <input type="url" id="image" placeholder="https://..." />
+            </div>
+
+            <div class="field">
+              <label for="image1">Image 1 URL</label>
+              <input type="url" id="image1" placeholder="https://..." />
+            </div>
+
+            <div class="field">
+              <label for="image2">Image 2 URL</label>
+              <input type="url" id="image2" placeholder="https://..." />
+            </div>
+
+            <div class="field full">
+              <label for="image3">Image 3 URL</label>
+              <input type="url" id="image3" placeholder="https://..." />
+            </div>
+
+            <div class="field">
+              <label for="category">Category</label>
+              <input type="text" id="category" placeholder="e.g. Electronics" />
+            </div>
+
+            <div class="field">
+              <label for="brand">Brand</label>
+              <input type="text" id="brand" placeholder="e.g. Boat" />
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="primary" id="generateBtn">Generate Output</button>
+            <button class="secondary" id="copyItemBtn">Copy Item</button>
+            <button class="secondary" id="copyArrayBtn">Copy Full Array</button>
+            <button class="secondary" id="fillNextIdBtn">Use Next ID</button>
+            <button class="secondary" id="clearFormBtn">Clear Form</button>
+            <button class="danger" id="resetSavedBtn">Reset Saved Data</button>
+          </div>
+
+          <div class="status" id="formStatus">Ready. Fill product details and click Generate Output.</div>
+        </div>
       </div>
-      <div class="status-item">
-        <span class="status-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24">
-            <path d="M12 21c1.2 0 2-.8 2-2h-4c0 1.2.8 2 2 2z"></path>
-            <path d="M18 16H6l1.5-2.2V10a4.5 4.5 0 1 1 9 0v3.8L18 16z"></path>
-          </svg>
-        </span>
+
+      <!-- Preview -->
+      <div class="panel">
+        <div class="panel-title">
+          <span>3) Image Preview</span>
+          <span class="subhint">Live preview of main image + gallery images</span>
+        </div>
+        <div class="panel-body">
+          <div class="preview-grid">
+            <div class="preview-card">
+              <div class="img-wrap">
+                <img id="previewMain" alt="Main Preview">
+                <div class="placeholder" id="placeholderMain">Main Image Preview</div>
+              </div>
+              <div class="cap">Main Image</div>
+            </div>
+
+            <div class="preview-card">
+              <div class="img-wrap">
+                <img id="preview1" alt="Image 1 Preview">
+                <div class="placeholder" id="placeholder1">Image 1 Preview</div>
+              </div>
+              <div class="cap">Image 1</div>
+            </div>
+
+            <div class="preview-card">
+              <div class="img-wrap">
+                <img id="preview2" alt="Image 2 Preview">
+                <div class="placeholder" id="placeholder2">Image 2 Preview</div>
+              </div>
+              <div class="cap">Image 2</div>
+            </div>
+
+            <div class="preview-card">
+              <div class="img-wrap">
+                <img id="preview3" alt="Image 3 Preview">
+                <div class="placeholder" id="placeholder3">Image 3 Preview</div>
+              </div>
+              <div class="cap">Image 3</div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+    </section>
+
+    <!-- RIGHT -->
+    <section class="right-stack">
+      <div class="panel">
+        <div class="panel-title">
+          <span>4) Ready Paste Output</span>
+          <span class="subhint">Bottom half code output • copy directly into products.json</span>
+        </div>
+        <div class="panel-body" style="display:flex; flex-direction:column; min-height:0;">
+          <div class="code-toolbar">
+            <div class="toolbar-left">
+              <div class="pill" id="currentModePill">Mode: Single Item</div>
+              <div class="pill" id="currentIdPill">ID: 1</div>
+            </div>
+            <div class="toolbar-right">
+              <button class="success" id="copyOutputBtn">Copy Current Output</button>
+              <button class="warn" id="downloadBtn">Download .txt</button>
+            </div>
+          </div>
+
+          <pre id="output">{
+  "id": 1,
+  "name": "",
+  "description": "",
+  "price": "Just ₹ ",
+  "rating": 0,
+  "link": "",
+  "image": "",
+  "images": [
+    "",
+    "",
+    ""
+  ],
+  "category": "",
+  "brand": ""
+},</pre>
+
+          <div class="footer-note">
+            Tip: Use <strong>Single Item (with comma)</strong> for direct paste inside your existing <code>products.json</code> array.
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">
+          <span>5) Ultimate Workflow Guide</span>
+          <span class="subhint">So you never need to ask again 😎</span>
+        </div>
+        <div class="panel-body">
+          <div style="display:grid; gap:10px;">
+            <div class="stat">
+              <div class="k">Step 1</div>
+              <div class="v" style="font-size:0.98rem;">Paste your current full products array in the top box (optional).</div>
+            </div>
+            <div class="stat">
+              <div class="k">Step 2</div>
+              <div class="v" style="font-size:0.98rem;">Click <strong>Analyze Existing Array</strong> to auto-find next ID.</div>
+            </div>
+            <div class="stat">
+              <div class="k">Step 3</div>
+              <div class="v" style="font-size:0.98rem;">Fill product details. Leave ID blank to auto-use next ID.</div>
+            </div>
+            <div class="stat">
+              <div class="k">Step 4</div>
+              <div class="v" style="font-size:0.98rem;">Use <strong>Single Item (with comma)</strong> for easiest paste.</div>
+            </div>
+            <div class="stat">
+              <div class="k">Step 5</div>
+              <div class="v" style="font-size:0.98rem;">Use <strong>Full Array</strong> if you want the entire updated array generated instantly.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <script>
-    const fileMenuBtn = document.getElementById("fileMenuBtn");
-    const fileDropdown = document.getElementById("fileDropdown");
-    const folderBtn = document.getElementById("folderBtn");
+    const STORAGE_KEYS = {
+      form: 'shopplus_generator_form_v1',
+      theme: 'shopplus_generator_theme_v1',
+      existing: 'shopplus_generator_existing_v1'
+    };
 
-    // Clicking File toggles dropdown, second click navigates (fast access)
-    fileMenuBtn.addEventListener("click", function (e) {
-      e.stopPropagation();
+    let existingProducts = [];
+    let nextSuggestedId = 1;
+    let lastGeneratedItem = null;
+    let lastGeneratedOutput = '';
+    let lastGeneratedFullArray = '';
 
-      if (fileDropdown.classList.contains("show")) {
-        window.location.href = "file.html";
-      } else {
-        fileDropdown.classList.add("show");
-        fileMenuBtn.classList.add("active");
+    const ids = [
+      'id','name','description','price','rating','link','image','image1','image2','image3','category','brand','mode'
+    ];
+
+    function $(id) {
+      return document.getElementById(id);
+    }
+
+    function safeTrim(value) {
+      return (value || '').trim();
+    }
+
+    function setStatus(target, msg, type = 'normal') {
+      const el = $(target);
+      el.textContent = msg;
+      el.style.color =
+        type === 'success' ? 'var(--ok)' :
+        type === 'warn' ? 'var(--warn)' :
+        type === 'danger' ? 'var(--danger)' :
+        'var(--muted)';
+    }
+
+    function updateThemeButton() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      $('themeToggle').textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+    }
+
+    function loadTheme() {
+      const saved = localStorage.getItem(STORAGE_KEYS.theme) || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+      updateThemeButton();
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem(STORAGE_KEYS.theme, next);
+      updateThemeButton();
+    }
+
+    function saveForm() {
+      const data = {};
+      ids.forEach(id => data[id] = $(id).value);
+      localStorage.setItem(STORAGE_KEYS.form, JSON.stringify(data));
+      localStorage.setItem(STORAGE_KEYS.existing, $('existingJson').value);
+    }
+
+    function loadForm() {
+      const saved = localStorage.getItem(STORAGE_KEYS.form);
+      if (saved) {
+        try {
+          const data = JSON.parse(saved);
+          ids.forEach(id => {
+            if (data[id] !== undefined && $(id)) $(id).value = data[id];
+          });
+        } catch {}
       }
-    });
+      const existing = localStorage.getItem(STORAGE_KEYS.existing);
+      if (existing) $('existingJson').value = existing;
+    }
 
-    // Clicking folder opens file.html directly
-    folderBtn.addEventListener("click", function () {
-      window.location.href = "file.html";
-    });
+    function resetSavedData() {
+      localStorage.removeItem(STORAGE_KEYS.form);
+      localStorage.removeItem(STORAGE_KEYS.existing);
+      setStatus('formStatus', 'Saved browser data reset successfully.', 'success');
+      setTimeout(() => setStatus('formStatus', 'Ready. Fill product details and click Generate Output.'), 1800);
+    }
 
-    // Clicking dropdown links should navigate normally
-    fileDropdown.addEventListener("click", function (e) {
-      e.stopPropagation();
-    });
+    function updateStats() {
+      $('statCount').textContent = existingProducts.length;
+      const highest = existingProducts.reduce((max, p) => Math.max(max, Number(p.id) || 0), 0);
+      $('statHighestId').textContent = highest;
+      $('statNextId').textContent = nextSuggestedId;
+      const modeMap = {
+        item: 'Item',
+        object: 'Object',
+        fullArray: 'Full Array'
+      };
+      $('statMode').textContent = modeMap[$('mode').value] || 'Item';
+    }
 
-    // Close dropdown when clicking outside
-    document.addEventListener("click", function () {
-      fileDropdown.classList.remove("show");
-      fileMenuBtn.classList.remove("active");
-    });
+    function analyzeExistingArray() {
+      const raw = $('existingJson').value.trim();
+      if (!raw) {
+        existingProducts = [];
+        nextSuggestedId = 1;
+        updateStats();
+        setStatus('analyzeStatus', 'No existing array pasted. Next ID reset to 1.', 'warn');
+        return;
+      }
+
+      try {
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) {
+          throw new Error('Pasted data is not an array');
+        }
+
+        existingProducts = parsed;
+        const highest = existingProducts.reduce((max, p) => Math.max(max, Number(p.id) || 0), 0);
+        nextSuggestedId = highest + 1;
+
+        updateStats();
+        setStatus('analyzeStatus', `Success! Found ${existingProducts.length} products. Next suggested ID is ${nextSuggestedId}.`, 'success');
+
+        if (!$('id').value.trim()) {
+          $('id').value = nextSuggestedId;
+        }
+      } catch (err) {
+        existingProducts = [];
+        nextSuggestedId = 1;
+        updateStats();
+        setStatus('analyzeStatus', 'Invalid JSON array. Please paste a valid full products array.', 'danger');
+      }
+      saveForm();
+    }
+
+    function getEffectiveId() {
+      const manual = safeTrim($('id').value);
+      if (manual) return Number(manual);
+      return nextSuggestedId || 1;
+    }
+
+    function buildProductObject() {
+      const product = {
+        id: getEffectiveId(),
+        name: safeTrim($('name').value),
+        description: safeTrim($('description').value),
+        price: `Just ₹ ${safeTrim($('price').value)}`.trim(),
+        rating: Number(safeTrim($('rating').value)) || 0,
+        link: safeTrim($('link').value),
+        image: safeTrim($('image').value),
+        images: [
+          safeTrim($('image1').value),
+          safeTrim($('image2').value),
+          safeTrim($('image3').value)
+        ],
+        category: safeTrim($('category').value),
+        brand: safeTrim($('brand').value)
+      };
+      return product;
+    }
+
+    function formatItemWithComma(product) {
+      return JSON.stringify(product, null, 2) + ',';
+    }
+
+    function formatObjectNoComma(product) {
+      return JSON.stringify(product, null, 2);
+    }
+
+    function formatFullArray(product) {
+      const merged = [...existingProducts, product];
+      return JSON.stringify(merged, null, 2);
+    }
+
+    function generateOutput() {
+      const product = buildProductObject();
+      const mode = $('mode').value;
+
+      lastGeneratedItem = product;
+      lastGeneratedFullArray = formatFullArray(product);
+
+      let output = '';
+      if (mode === 'item') {
+        output = formatItemWithComma(product);
+        $('currentModePill').textContent = 'Mode: Single Item';
+      } else if (mode === 'object') {
+        output = formatObjectNoComma(product);
+        $('currentModePill').textContent = 'Mode: Single Object';
+      } else {
+        output = lastGeneratedFullArray;
+        $('currentModePill').textContent = 'Mode: Full Array';
+      }
+
+      lastGeneratedOutput = output;
+      $('output').textContent = output;
+      $('currentIdPill').textContent = `ID: ${product.id}`;
+
+      setStatus('formStatus', `Generated successfully for product ID ${product.id}.`, 'success');
+      saveForm();
+      updateStats();
+    }
+
+    async function copyText(text, successMsg) {
+      try {
+        await navigator.clipboard.writeText(text);
+        setStatus('formStatus', successMsg, 'success');
+      } catch {
+        setStatus('formStatus', 'Copy failed. Please copy manually.', 'danger');
+      }
+    }
+
+    function copyCurrentOutput() {
+      copyText($('output').textContent, 'Current output copied successfully!');
+    }
+
+    function copyItem() {
+      const product = lastGeneratedItem || buildProductObject();
+      copyText(formatItemWithComma(product), 'Single item with comma copied!');
+    }
+
+    function copyFullArray() {
+      const product = lastGeneratedItem || buildProductObject();
+      copyText(formatFullArray(product), 'Full array copied successfully!');
+    }
+
+    function clearForm() {
+      ['id','name','description','price','rating','link','image','image1','image2','image3','category','brand'].forEach(id => {
+        $(id).value = '';
+      });
+      $('mode').value = 'item';
+      $('id').value = nextSuggestedId || 1;
+      generateOutput();
+      updatePreviews();
+      setStatus('formStatus', 'Form cleared. Next suggested ID applied.', 'warn');
+      saveForm();
+    }
+
+    function clearExisting() {
+      $('existingJson').value = '';
+      existingProducts = [];
+      nextSuggestedId = 1;
+      updateStats();
+      $('id').value = 1;
+      setStatus('analyzeStatus', 'Existing array cleared. Next ID reset to 1.', 'warn');
+      saveForm();
+    }
+
+    function useNextId() {
+      $('id').value = nextSuggestedId || 1;
+      setStatus('formStatus', `Next suggested ID ${nextSuggestedId} applied.`, 'success');
+      saveForm();
+    }
+
+    function attachImage(inputId, imgId, placeholderId) {
+      const url = safeTrim($(inputId).value);
+      const img = $(imgId);
+      const ph = $(placeholderId);
+
+      if (!url) {
+        img.style.display = 'none';
+        img.removeAttribute('src');
+        ph.style.display = 'block';
+        return;
+      }
+
+      img.onload = () => {
+        img.style.display = 'block';
+        ph.style.display = 'none';
+      };
+
+      img.onerror = () => {
+        img.style.display = 'none';
+        ph.style.display = 'block';
+        ph.textContent = 'Invalid / blocked image URL';
+      };
+
+      ph.textContent = 'Loading preview...';
+      ph.style.display = 'block';
+      img.style.display = 'none';
+      img.src = url;
+    }
+
+    function updatePreviews() {
+      attachImage('image', 'previewMain', 'placeholderMain');
+      attachImage('image1', 'preview1', 'placeholder1');
+      attachImage('image2', 'preview2', 'placeholder2');
+      attachImage('image3', 'preview3', 'placeholder3');
+    }
+
+    function downloadOutput() {
+      const blob = new Blob([$('output').textContent], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'shopplus-product-output.txt';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      setStatus('formStatus', 'Output downloaded as .txt successfully!', 'success');
+    }
+
+    function bindLiveSave() {
+      ids.forEach(id => {
+        $(id).addEventListener('input', () => {
+          saveForm();
+          if (['image','image1','image2','image3'].includes(id)) updatePreviews();
+          if (id === 'mode') {
+            updateStats();
+            generateOutput();
+          }
+        });
+      });
+
+      $('existingJson').addEventListener('input', saveForm);
+    }
+
+    function init() {
+      loadTheme();
+      loadForm();
+      analyzeExistingArray();
+
+      if (!$('id').value.trim()) $('id').value = nextSuggestedId || 1;
+
+      bindLiveSave();
+      updatePreviews();
+      updateStats();
+      generateOutput();
+
+      $('themeToggle').addEventListener('click', toggleTheme);
+      $('analyzeBtn').addEventListener('click', analyzeExistingArray);
+      $('clearExistingBtn').addEventListener('click', clearExisting);
+      $('generateBtn').addEventListener('click', generateOutput);
+      $('copyOutputBtn').addEventListener('click', copyCurrentOutput);
+      $('copyItemBtn').addEventListener('click', copyItem);
+      $('copyArrayBtn').addEventListener('click', copyFullArray);
+      $('fillNextIdBtn').addEventListener('click', useNextId);
+      $('clearFormBtn').addEventListener('click', clearForm);
+      $('resetSavedBtn').addEventListener('click', resetSavedData);
+      $('downloadBtn').addEventListener('click', downloadOutput);
+    }
+
+    init();
   </script>
 </body>
 </html>
